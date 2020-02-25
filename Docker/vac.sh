@@ -1,9 +1,9 @@
 #!/bin/sh
 docker run \
 -e USER=${USER} \
--e CLOUDSTACK_API_KEY=${CLOUDSTACK_API_KEY} \
--e CLOUDSTACK_SECRET_KEY=${CLOUDSTACK_SECRET_KEY} \
--e CLOUDSTACK_HOST=${CLOUDSTACK_HOST} \
+-e COSMIC_API_KEY=${COSMIC_API_KEY} \
+-e COSMIC_SECRET_KEY=${COSMIC_SECRET_KEY} \
+-e COSMIC_HOST=${COSMIC_HOST} \
 -e ZONE_NAME=${ZONE_NAME} \
 -e SERVICE_OFFERING_NAME=${SERVICE_OFFERING_NAME} \
 -e VPC_PUBLIC_IP=${VPC_PUBLIC_IP} \
@@ -27,4 +27,4 @@ docker run \
 -e KITCHEN_LOCAL_YAML=${KITCHEN_LOCAL_YAML} \
 -e DISK_OFFERING_NAME=${DISK_OFFERING_NAME} \
 -e EXPUNGE_ON_DESTROY=${EXPUNGE_ON_DESTROY} \
--ti --rm  -v $(pwd):/work missioncriticalcloud/vagrant-cloudstack /bin/bash
+-ti --rm  -v $(pwd):/work MissionCriticalCloud/vagrant-cosmic /bin/bash

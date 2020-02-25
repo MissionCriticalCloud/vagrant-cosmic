@@ -1,5 +1,5 @@
 en:
-  vagrant_cloudstack:
+  vagrant_cosmic:
     already_status: |-
       The machine is already %{status}.
     basic_network: |-
@@ -28,9 +28,9 @@ en:
       Security groups defined but not supported in the zone %{zone_name}
       Defined security groups will be ignored
     ssh_key_pair_creating: |-
-      Creating an SSH keypair in CloudStack...
+      Creating an SSH keypair in Cosmic...
     ssh_key_pair_removing: |-
-      Deleting the SSH keypair in CloudStack...
+      Deleting the SSH keypair in Cosmic...
     ssh_key_pair_no_success_removing: |-
       Removing SSH keypair returned unsuccesful (keypair name: %{name})
     starting: |-
@@ -64,7 +64,7 @@ en:
     deleting_firewall_rule: |-
       Deleting the firewall rule ...
     warn_networks: |-
-      Warning! The Cloudstack provider doesn't support any of the Vagrant
+      Warning! The Cosmic provider doesn't support any of the Vagrant
       high-level network configurations (`config.vm.network`). They
       will be silently ignored.
     will_not_destroy: |-
@@ -79,19 +79,19 @@ en:
       template_id_required: |-
         A template_id  must be configured via "template_id"
       secret_key_missing: |-
-        The specified secret key for Cloudstack could not be found
+        The specified secret key for Cosmic could not be found
 
     errors:
       fog_error: |-
-        There was an error talking to Cloudstack. The error message is shown
+        There was an error talking to Cosmic. The error message is shown
         below:
 
         %{message}
       instance_ready_timeout: |-
-        The instance never became "ready" in Cloudstack. The timeout currently
+        The instance never became "ready" in Cosmic. The timeout currently
         set waiting for the instance to become ready is %{timeout} seconds.
         Please verify that the machine properly boots. If you need more time
-        set the `instance_ready_timeout` configuration on the Cloudstack provider.
+        set the `instance_ready_timeout` configuration on the Cosmic provider.
       rsync_error: |-
         There was an error when attemping to rsync a share folder.
         Please inspect the error message below for more info.

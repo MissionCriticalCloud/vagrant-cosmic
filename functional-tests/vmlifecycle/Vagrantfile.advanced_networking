@@ -29,34 +29,34 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |global_config|
       config.winrm.retry_delay = 30
       config.vm.synced_folder ".", "/vagrant", type: "rsync",
         rsync__exclude: [".git/", "vendor"], disabled: options['rsync_disabled']
-      config.vm.provider :cloudstack do |cloudstack, override|
+      config.vm.provider :cosmic do |cosmic, override|
 
-        cloudstack.display_name = ENV['TEST_NAME']
+        cosmic.display_name = ENV['TEST_NAME']
 
-        cloudstack.host       = ENV['CLOUDSTACK_HOST']
-        cloudstack.path       = '/client/api'
-        cloudstack.port       = '443'
-        cloudstack.scheme     = 'https'
-        cloudstack.api_key    = ENV['CLOUDSTACK_API_KEY']
-        cloudstack.secret_key = ENV['CLOUDSTACK_SECRET_KEY']
-        cloudstack.expunge_on_destroy = ENV['EXPUNGE_ON_DESTROY']=="true"
+        cosmic.host       = ENV['COSMIC_HOST']
+        cosmic.path       = '/client/api'
+        cosmic.port       = '443'
+        cosmic.scheme     = 'https'
+        cosmic.api_key    = ENV['COSMIC_API_KEY']
+        cosmic.secret_key = ENV['COSMIC_SECRET_KEY']
+        cosmic.expunge_on_destroy = ENV['EXPUNGE_ON_DESTROY']=="true"
 
-        cloudstack.zone_name             = ENV['ZONE_NAME']
-        cloudstack.network_name          = ENV['NETWORK_NAME']
-        cloudstack.service_offering_name = ENV['SERVICE_OFFERING_NAME']
-        cloudstack.disk_offering_name    = ENV['DISK_OFFERING_NAME']
+        cosmic.zone_name             = ENV['ZONE_NAME']
+        cosmic.network_name          = ENV['NETWORK_NAME']
+        cosmic.service_offering_name = ENV['SERVICE_OFFERING_NAME']
+        cosmic.disk_offering_name    = ENV['DISK_OFFERING_NAME']
 
-        cloudstack.pf_ip_address         = ENV['PUBLIC_SOURCE_NAT_IP']
+        cosmic.pf_ip_address         = ENV['PUBLIC_SOURCE_NAT_IP']
 
-        cloudstack.pf_public_port        = options['public_port']
-        cloudstack.pf_private_port       = options['private_port']
-        cloudstack.pf_trusted_networks   = ENV['SOURCE_CIDR']
-        cloudstack.pf_open_firewall      = false
+        cosmic.pf_public_port        = options['public_port']
+        cosmic.pf_private_port       = options['private_port']
+        cosmic.pf_trusted_networks   = ENV['SOURCE_CIDR']
+        cosmic.pf_open_firewall      = false
 
 
-        cloudstack.ssh_key               = ENV['SSH_KEY'] unless ENV['SSH_KEY'].nil?
-        cloudstack.ssh_user              = ENV['SSH_USER'] unless ENV['SSH_USER'].nil?
-        cloudstack.vm_user               = ENV['WINDOWS_USER'] unless ENV['WINDOWS_USER'].nil?
+        cosmic.ssh_key               = ENV['SSH_KEY'] unless ENV['SSH_KEY'].nil?
+        cosmic.ssh_user              = ENV['SSH_USER'] unless ENV['SSH_USER'].nil?
+        cosmic.vm_user               = ENV['WINDOWS_USER'] unless ENV['WINDOWS_USER'].nil?
 
       end
     end

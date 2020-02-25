@@ -3,7 +3,7 @@ require 'coveralls'
 require 'rspec/its'
 require 'i18n'
 
-Dir["#{__dir__}/vagrant-cloudstack/support/**/*.rb"].each { |f| require f }
+Dir["#{__dir__}/vagrant-cosmic/support/**/*.rb"].each { |f| require f }
 
 SimpleCov.start
 Coveralls.wear!

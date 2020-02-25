@@ -27,11 +27,11 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 #
 
-# install vagrant and the vagrant-cloudstack plugin
+# install vagrant and the vagrant-cosmic plugin
 RUN curl -L https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.deb > /tmp/vagrant_x86_64.deb && \
     dpkg -i /tmp/vagrant_x86_64.deb && \
     rm -f /tmp/vagrant_x86_64.deb && \
-    vagrant plugin install vagrant-cloudstack && \
+    vagrant plugin install vagrant-cosmic && \
     vagrant plugin install vagrant-winrm --plugin-version 0.7.0
 
 RUN curl -L https://packages.chef.io/stable/debian/${CHEFDK_DEB_VERSION}/chefdk_${CHEFDK_VERSION}-1_amd64.deb > /tmp/chef_dk.deb && \

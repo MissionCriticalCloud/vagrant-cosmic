@@ -1,7 +1,7 @@
 #!/bin/bash
 VERSION=1.5.0
-mkdir -p /tmp/vagrant-cloudstack-build_rpm.$$/vagrant-cloudstack-$VERSION
-cp -r . /tmp/vagrant-cloudstack-build_rpm.$$/vagrant-cloudstack-$VERSION/
-tar -C /tmp/vagrant-cloudstack-build_rpm.$$/ -czf ~/rpmbuild/SOURCES/vagrant-cloudstack-$VERSION.tar.gz vagrant-cloudstack-$VERSION
-rpmbuild --define "gemver $VERSION" -bb vagrant-cloudstack.spec
-rm -rf /tmp/vagrant-cloudstack-build_rpm.$$
+mkdir -p /tmp/vagrant-cosmic-build_rpm.$$/vagrant-cosmic-$VERSION
+cp -r . /tmp/vagrant-cosmic-build_rpm.$$/vagrant-cosmic-$VERSION/
+tar -C /tmp/vagrant-cosmic-build_rpm.$$/ -czf ~/rpmbuild/SOURCES/vagrant-cosmic-$VERSION.tar.gz vagrant-cosmic-$VERSION
+rpmbuild --define "gemver $VERSION" -bb vagrant-cosmic.spec
+rm -rf /tmp/vagrant-cosmic-build_rpm.$$

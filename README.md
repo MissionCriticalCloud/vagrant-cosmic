@@ -1,15 +1,15 @@
-# Vagrant Cloudstack Provider
+# Vagrant Cosmic Provider
 
-[![Build Status](https://travis-ci.org/MissionCriticalCloud/vagrant-cloudstack.png?branch=master)](https://travis-ci.org/MissionCriticalCloud/vagrant-cloudstack)
-[![Gem Version](https://badge.fury.io/rb/vagrant-cloudstack.png)](http://badge.fury.io/rb/vagrant-cloudstack)
-[![Code climate](https://codeclimate.com/github/MissionCriticalCloud/vagrant-cloudstack.png)](https://codeclimate.com/github/MissionCriticalCloud/vagrant-cloudstack)
-[![Coverage Status](https://coveralls.io/repos/github/MissionCriticalCloud/vagrant-cloudstack/badge.svg?branch=master)](https://coveralls.io/github/MissionCriticalCloud/vagrant-cloudstack?branch=master)
-[![BCH compliance](https://bettercodehub.com/edge/badge/MissionCriticalCloud/vagrant-cloudstack?branch=master)](https://bettercodehub.com/)
+[![Build Status](https://travis-ci.org/MissionCriticalCloud/vagrant-cosmic.png?branch=master)](https://travis-ci.org/MissionCriticalCloud/vagrant-cosmic)
+[![Gem Version](https://badge.fury.io/rb/vagrant-cosmic.png)](http://badge.fury.io/rb/vagrant-cosmic)
+[![Code climate](https://codeclimate.com/github/MissionCriticalCloud/vagrant-cosmic.png)](https://codeclimate.com/github/MissionCriticalCloud/vagrant-cosmic)
+[![Coverage Status](https://coveralls.io/repos/github/MissionCriticalCloud/vagrant-cosmic/badge.svg?branch=master)](https://coveralls.io/github/MissionCriticalCloud/vagrant-cosmic?branch=master)
+[![BCH compliance](https://bettercodehub.com/edge/badge/MissionCriticalCloud/vagrant-cosmic?branch=master)](https://bettercodehub.com/)
 
 This is a fork of [mitchellh AWS Provider](https://github.com/mitchellh/vagrant-aws/).
 
-This is a [Vagrant](http://www.vagrantup.com) 1.5+ plugin that adds a [Cloudstack](http://cloudstack.apache.org)
-provider to Vagrant for use with either [Cosmic](https://github.com/MissionCriticalCloud/cosmic) or [Cloudstack](http://cloudstack.apache.org).
+This is a [Vagrant](http://www.vagrantup.com) 1.5+ plugin that adds a `cosmic`
+provider to Vagrant for use with [Cosmic](https://github.com/MissionCriticalCloud/cosmic).
 
 ## Features
 
@@ -20,13 +20,13 @@ provider to Vagrant for use with either [Cosmic](https://github.com/MissionCriti
 ## Usage
 
 Install using standard Vagrant 1.1+ plugin installation methods. After
-installing, `vagrant up` and specify the `cloudstack` provider. An example is
+installing, `vagrant up` and specify the `cosmic` provider. An example is
 shown below.
 
 ```
-$ vagrant plugin install vagrant-cloudstack
+$ vagrant plugin install vagrant-cosmic
 ...
-$ vagrant up --provider=cloudstack
+$ vagrant up --provider=cosmic
 ...
 ```
 
@@ -38,21 +38,21 @@ your information where necessary.
 
 ```
 Vagrant.configure("2") do |config|
-  config.vm.box = "${cloudstack.template_name}"
+  config.vm.box = "${cosmic.template_name}"
 
-  config.vm.provider :cloudstack do |cloudstack, override|
-    cloudstack.host = "cloudstack.local"
-    cloudstack.path = "/client/api"
-    cloudstack.port = "8080"
-    cloudstack.scheme = "http"
-    cloudstack.api_key = "AAAAAAAAAAAAAAAAAAA"
-    cloudstack.secret_key = "AAAAAAAAAAAAAAAAAAA"
+  config.vm.provider :cosmic do |cosmic, override|
+    cosmic.host = "cosmic.local"
+    cosmic.path = "/client/api"
+    cosmic.port = "8080"
+    cosmic.scheme = "http"
+    cosmic.api_key = "AAAAAAAAAAAAAAAAAAA"
+    cosmic.secret_key = "AAAAAAAAAAAAAAAAAAA"
 
-    cloudstack.service_offering_id = "AAAAAAAAAAAAAAAAAAA"
-    cloudstack.disk_offering_id = "AAAAAAAAAAAAAAAAAAA"
-    cloudstack.network_id = "AAAAAAAAAAAAAAAAAAA"
-    cloudstack.zone_id = "AAAAAAAAAAAAAAAAAAA"
-    cloudstack.project_id = "AAAAAAAAAAAAAAAAAAA"
+    cosmic.service_offering_id = "AAAAAAAAAAAAAAAAAAA"
+    cosmic.disk_offering_id = "AAAAAAAAAAAAAAAAAAA"
+    cosmic.network_id = "AAAAAAAAAAAAAAAAAAA"
+    cosmic.zone_id = "AAAAAAAAAAAAAAAAAAA"
+    cosmic.project_id = "AAAAAAAAAAAAAAAAAAA"
   end
 end
 ```
@@ -61,31 +61,31 @@ Or with names instead of ids:
 
 ```
 Vagrant.configure("2") do |config|
-  config.vm.box = "${cloudstack.template_name}"
+  config.vm.box = "${cosmic.template_name}"
 
-  config.vm.provider :cloudstack do |cloudstack, override|
-    cloudstack.host = "cloudstack.local"
-    cloudstack.path = "/client/api"
-    cloudstack.port = "8080"
-    cloudstack.scheme = "http"
-    cloudstack.api_key = "AAAAAAAAAAAAAAAAAAA"
-    cloudstack.secret_key = "AAAAAAAAAAAAAAAAAAA"
+  config.vm.provider :cosmic do |cosmic, override|
+    cosmic.host = "cosmic.local"
+    cosmic.path = "/client/api"
+    cosmic.port = "8080"
+    cosmic.scheme = "http"
+    cosmic.api_key = "AAAAAAAAAAAAAAAAAAA"
+    cosmic.secret_key = "AAAAAAAAAAAAAAAAAAA"
 
-    cloudstack.service_offering_name = "THE-BESTEST"
-    cloudstack.disk_offering_name = "THE-LARGEST-OFFER-AVAILABLE"
-    cloudstack.network_name = "WOW-SUCH-FAST-OFFERING"
-    cloudstack.zone_name = "District-9"
-    cloudstack.name = "doge-is-a-hostname-now"
+    cosmic.service_offering_name = "THE-BESTEST"
+    cosmic.disk_offering_name = "THE-LARGEST-OFFER-AVAILABLE"
+    cosmic.network_name = "WOW-SUCH-FAST-OFFERING"
+    cosmic.zone_name = "District-9"
+    cosmic.name = "doge-is-a-hostname-now"
     # Sadly there is currently no support for the project api in fog.
-    cloudstack.project_id = "AAAAAAAAAAAAAAAAAAA"
+    cosmic.project_id = "AAAAAAAAAAAAAAAAAAA"
   end
 end
 ```
 
-And then run `vagrant up --provider=cloudstack`.
+And then run `vagrant up --provider=cosmic`.
 
-This will start an instance in Cloudstack. And assuming your template
-on Cloudstack is Vagrant compatible _(vagrant user with official
+This will start an instance in Cosmic. And assuming your template
+on Cosmic is Vagrant compatible _(vagrant user with official
 vagrant pub key in authorized_keys)_ SSH and provisioning will work as
 well.
 
@@ -98,14 +98,14 @@ this will also enable you to upgrade the different settings in your cloud withou
 to update UUIDs in your Vagrantfile. If both are specified, the id parameter takes precedence.
 
 * `name` - Hostname of the created machine
-* `host` - Cloudstack api host
-* `path` - Cloudstack api path
-* `port` - Cloudstack api port
-* `scheme` - Cloudstack api scheme _(defaults: https (thanks to the resolution order in fog))_
-* `api_key` - The api key for accessing Cloudstack
-* `secret_key` - The secret key for accessing Cloudstack
+* `host` - Cosmic API host
+* `path` - Cosmic API path
+* `port` - Cosmic API port
+* `scheme` - Cosmic API scheme _(defaults: https (thanks to the resolution order in fog))_
+* `api_key` - The api key for accessing Cosmic
+* `secret_key` - The secret key for accessing Cosmic
 * `instance_ready_timeout` - The number of seconds to wait for the instance
-  to become "ready" in Cloudstack. Defaults to 120 seconds.
+  to become "ready" in Cosmic. Defaults to 120 seconds.
 * `domain_id` - Domain id to launch the instance into
 * `network_id` - Network uuid(s) that the instance should use
   - `network_id` is single value (e.g. `"AAAA"`) or multiple values (e.g. `["AAAA", "BBBB"]`)
@@ -126,7 +126,7 @@ to update UUIDs in your Vagrantfile. If both are specified, the id parameter tak
 * `pf_public_rdp_port` - Public RDP port for port forwarding rule
 * `pf_public_port_randomrange` - If public port is omited, a port from this range wll be used (default `{:start=>49152, :end=>65535}`)
 * `pf_private_port` - Private port for port forwarding rule (defaults to respective Communicator protocol)
-* `pf_open_firewall` - Flag to enable/disable automatic open firewall rule (by CloudStack)
+* `pf_open_firewall` - Flag to enable/disable automatic open firewall rule (by Cosmic)
 * `pf_trusted_networks` - Array of CIDRs or (array of) comma-separated string of CIDRs to network(s) to 
   - automatically (by plugin) generate firewall rules for, ignored if `pf_open_firewall` set `true`
   - use as default for firewall rules where source CIDR is missing
@@ -140,7 +140,7 @@ to update UUIDs in your Vagrantfile. If both are specified, the id parameter tak
 * `ssh_network_name` - The network_name to be used when loging in to the vm via ssh _(defaults to first nic)_
   - Use either `ssh_network_id` or `ssh_network_name`. If specified both , use `ssh_network_id`
 * `vm_user` - User name to be used with winrm _(defaults to Vagrant's `config.winrm.username`)_
-* `vm_password` - Password to be used with winrm. _(If the CloudStack template is "Password Enabled", leaving this unset will trigger the plugin to retrieve and use it.)_
+* `vm_password` - Password to be used with winrm. _(If the Cosmic template is "Password Enabled", leaving this unset will trigger the plugin to retrieve and use it.)_
 * `private_ip_address` - private (static)ip address to be used by the virtual machine
 * `expunge_on_destroy` - Flag to enable/disable expunge vm on destroy
 
@@ -150,9 +150,9 @@ These can be set like typical provider-specific configuration:
 Vagrant.configure("2") do |config|
   # ... other stuff
 
-  config.vm.provider :cloudstack do |cloudstack|
-    cloudstack.api_key = "foo"
-    cloudstack.secret_key = "bar"
+  config.vm.provider :cosmic do |cosmic|
+    cosmic.api_key = "foo"
+    cosmic.secret_key = "bar"
   end
 end
 ```
@@ -166,16 +166,16 @@ region you want to actually use, however. This looks like this:
 Vagrant.configure("2") do |config|
   # ... other stuff
 
-  config.vm.provider :cloudstack do |cloudstack|
-    cloudstack.api_key = "foo"
-    cloudstack.secret_key = "bar"
-    cloudstack.domain = "internal"
+  config.vm.provider :cosmic do |cosmic|
+    cosmic.api_key = "foo"
+    cosmic.secret_key = "bar"
+    cosmic.domain = "internal"
 
     # Simple domain config
-    cloudstack.domain_config "internal", :network_id => "AAAAAAAAAAAAAAAAAAA"
+    cosmic.domain_config "internal", :network_id => "AAAAAAAAAAAAAAAAAAA"
 
     # More comprehensive region config
-    cloudstack.domain_config "internal" do |domain|
+    cosmic.domain_config "internal" do |domain|
       domain.network_id = "AAAAAAAAAAAAAAAAAAA"
       domain.service_offering_id = "AAAAAAAAAAAAAAAAAAA"
     end
@@ -190,9 +190,9 @@ the top-level configurations, as you would probably expect.
 ## Networks
 
 Networking features in the form of `config.vm.network` are not
-supported with `vagrant-cloudstack`, currently. If any of these are
+supported with `vagrant-cosmic`, currently. If any of these are
 specified, Vagrant will emit a warning, but will otherwise boot
-the Cloudstack machine.
+the Cosmic machine.
 
 ### Basic networking versus Advanced networking
 
@@ -212,10 +212,10 @@ instance, with their IDs:
 Vagrant.configure("2") do |config|
   # ... other stuff
 
-  config.vm.provider :cloudstack do |cloudstack|
-    cloudstack.api_key = "foo"
-    cloudstack.secret_key = "bar"
-    cloudstack.security_group_ids = ['aaaa-bbbb-cccc-dddd', '1111-2222-3333-4444']
+  config.vm.provider :cosmic do |cosmic|
+    cosmic.api_key = "foo"
+    cosmic.secret_key = "bar"
+    cosmic.security_group_ids = ['aaaa-bbbb-cccc-dddd', '1111-2222-3333-4444']
   end
 end
 ```
@@ -226,10 +226,10 @@ or their names:
 Vagrant.configure("2") do |config|
   # ... other stuff
 
-  config.vm.provider :cloudstack do |cloudstack|
-    cloudstack.api_key = "foo"
-    cloudstack.secret_key = "bar"
-    cloudstack.security_group_names = ['
+  config.vm.provider :cosmic do |cosmic|
+    cosmic.api_key = "foo"
+    cosmic.secret_key = "bar"
+    cosmic.security_group_names = ['
 min_fantastiska_security_group', 'another_security_grupp']
   end
 end
@@ -241,10 +241,10 @@ But you can also create your Security Groups in the Vagrantfile:
 Vagrant.configure("2") do |config|
   # ... other stuff
 
-  config.vm.provider :cloudstack do |cloudstack|
-    cloudstack.api_key = "foo"
-    cloudstack.secret_key = "bar"
-    cloudstack.security_groups = [
+  config.vm.provider :cosmic do |cosmic|
+    cosmic.api_key = "foo"
+    cosmic.secret_key = "bar"
+    cosmic.security_groups = [
       {
         :name         => "Awesome_security_group",
         :description  => "Created from the Vagrantfile",
@@ -270,20 +270,20 @@ The rules created in Vagrantfile are removed when the virtual machine is destroy
 Vagrant.configure("2") do |config|
   # ... other stuff
 
-  config.vm.provider :cloudstack do |cloudstack|
+  config.vm.provider :cosmic do |cosmic|
 
     override.ssh.host = "X.X.X.X"
 
-    cloudstack.static_nat = [
+    cosmic.static_nat = [
       { :ipaddress => "A.A.A.A"}
     ]
 
-    cloudstack.port_forwarding_rules = [
+    cosmic.port_forwarding_rules = [
       { :ipaddress => "X.X.X.X", :protocol => "tcp", :publicport => 22, :privateport  => 22, :openfirewall => false },
       { :ipaddress => "X.X.X.X", :protocol => "tcp", :publicport => 80, :privateport  => 80, :openfirewall => false }
     ]
 
-    cloudstack.firewall_rules = [
+    cosmic.firewall_rules = [
       { :ipaddress => "A.A.A.A", :cidrlist  => "1.2.3.4/24", :protocol => "icmp", :icmptype => 8, :icmpcode => 0 },
       { :ipaddress => "X.X.X.X", :cidrlist  => "1.2.3.4/24", :protocol => "tcp", :startport => 22, :endport => 22 },
       { :ipaddress => "X.X.X.X", :cidrlist  => "1.2.3.4/24", :protocol => "tcp", :startport => 80, :endport => 80 }
@@ -300,7 +300,7 @@ Most values in the firewall and portforwarding rules are not mandatory, except e
 * `:openfirewall` - defaults to `pf_open_firewall`
 * `:cidrlist` - defaults to `pf_trusted_networks`
 * `:startport` - defaults to `:endport`
-* `:endport` - not required by CloudStack
+* `:endport` - not required by Cosmic
 
 
 For only allowing Vagrant to access the box for further provisioning (SSH/WinRM), and opening the Firewall for some subnets, the following config is sufficient:
@@ -308,24 +308,24 @@ For only allowing Vagrant to access the box for further provisioning (SSH/WinRM)
 Vagrant.configure("2") do |config|
   # ... other stuff
 
-  config.vm.provider :cloudstack do |cloudstack|
-    cloudstack.pf_open_firewall      = "false"
-    cloudstack.pf_ip_address         = X.X.X.X
-    cloudstack.pf_trusted_networks   = [ "1.2.3.4/24" , "11.22.33.44/32" ]
+  config.vm.provider :cosmic do |cosmic|
+    cosmic.pf_open_firewall      = "false"
+    cosmic.pf_ip_address         = X.X.X.X
+    cosmic.pf_trusted_networks   = [ "1.2.3.4/24" , "11.22.33.44/32" ]
   end
 end
 ```
-Where X.X.X.X is the ip of the respective CloudStack network, this will automatically map the port of the used Communicator (SSH/Winrm) via a random public port, open the Firewall and set Vagrant to use it.
+Where X.X.X.X is the ip of the respective Cosmic network, this will automatically map the port of the used Communicator (SSH/Winrm) via a random public port, open the Firewall and set Vagrant to use it.
 
 The plugin can also automatically generate firewall rules off of the portforwarding rules:
 ```ruby
 Vagrant.configure("2") do |config|
   # ... other stuff
 
-  config.vm.provider :cloudstack do |cloudstack|
+  config.vm.provider :cosmic do |cosmic|
 
-    cloudstack.pf_trusted_networks   = "1.2.3.4/24,11.22.33.44/32"
-    cloudstack.port_forwarding_rules = [
+    cosmic.pf_trusted_networks   = "1.2.3.4/24,11.22.33.44/32"
+    cosmic.port_forwarding_rules = [
       { :privateport  => 22, :generate_firewall => true },
       { :privateport  => 80, :generate_firewall => true }
     ]
@@ -337,7 +337,7 @@ end
 ### Virtual Router versus VPC
 Both Virtual Routers and VPCs are supported when using port-forwarding and firewall. This is automatically determined by the specific `pf_ip_address`.
 
-Note that there are architectural differences in CloudStack which the configuration must adhere to.
+Note that there are architectural differences in Cosmic which the configuration must adhere to.
 
 For VPC:
 * `pf_open_firewall` will be ignored as global setting and (specifically) in `port_forwarding_rules`
@@ -350,7 +350,7 @@ Usage of other attributes and features work with both network types. Such as `:g
 
 ## Synced Folders
 
-There is minimal support for synced folders. Upon `vagrant up`, `vagrant reload`, and `vagrant provision`, the Cloudstack provider will use `rsync` (if available) to uni-directionally sync the folder to the remote machine over SSH, and use Vagrant plugin `vagrant-winrm-syncedfolders` (if available) to uni-directionally sync the folder to the remote machine over WinRM.
+There is minimal support for synced folders. Upon `vagrant up`, `vagrant reload`, and `vagrant provision`, the Cosmic provider will use `rsync` (if available) to uni-directionally sync the folder to the remote machine over SSH, and use Vagrant plugin `vagrant-winrm-syncedfolders` (if available) to uni-directionally sync the folder to the remote machine over WinRM.
 
 This is good enough for all built-in Vagrant provisioners (shell,
 chef, and puppet) to work!
@@ -363,21 +363,21 @@ You can specify user data for the instance being booted.
 Vagrant.configure("2") do |config|
   # ... other stuff
 
-  config.vm.provider :cloudstack do |cloudstack|
+  config.vm.provider :cosmic do |cosmic|
     # Option 1: a single string
-    cloudstack.user_data = "#!/bin/bash\necho 'got user data' > /tmp/user_data.log\necho"
+    cosmic.user_data = "#!/bin/bash\necho 'got user data' > /tmp/user_data.log\necho"
 
     # Option 2: use a file
-    cloudstack.user_data = File.read("user_data.txt")
+    cosmic.user_data = File.read("user_data.txt")
   end
 end
 ```
 
-The maximum length of user_data is around 1500 bytes with Cloudstack API < 4.2 (base64 encoded user_data must be < 2048 bytes)
+The maximum length of user_data is around 1500 bytes with Cosmic API < 4.2 (base64 encoded user_data must be < 2048 bytes)
 
 ## Development
 
-To work on the `vagrant-cloudstack` plugin, clone this repository out, and use
+To work on the `vagrant-cosmic` plugin, clone this repository out, and use
 [Bundler](http://gembundler.com) to get the dependencies:
 
 ```
@@ -407,10 +407,10 @@ the plugin without installing it into your Vagrant environment by just
 creating a `Vagrantfile` in the top level of this directory (it is gitignored)
 and add the following line to your `Vagrantfile`
 ```ruby
-Vagrant.require_plugin "vagrant-cloudstack"
+Vagrant.require_plugin "vagrant-cosmic"
 ```
 Use bundler to execute Vagrant:
 
 ```
-$ bundle exec vagrant up --provider=cloudstack
+$ bundle exec vagrant up --provider=cosmic
 ```
