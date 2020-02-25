@@ -254,18 +254,18 @@ module VagrantPlugins
 
             @server = @env[:cosmic_compute].servers.create(options)
             @server_job_id = @server.job_id
-          rescue Fog::Compute::Cosmic::NotFound => e
+          rescue Fog::Cosmic::Compute::NotFound => e
             # Invalid subnet doesn't have its own error so we catch and
             # check the error message here.
             # XXX FIXME vpc?
             if e.message =~ /subnet ID/
-              raise Errors::FogError,
+              raise Fog::Cosmic::Compute::Error,
                     :message => "Subnet ID not found: #{@networks.map(&:id).compact.join(",")}"
             end
 
             raise
-          rescue Fog::Compute::Cosmic::Error => e
-            raise Errors::FogError, :message => e.message
+          rescue Fog::Cosmic::Compute::Error => e
+            raise Fog::Cosmic::Compute::Error, :message => e.message
           end
 
           @env[:machine].id = @server.id
@@ -352,8 +352,8 @@ module VagrantPlugins
               @env[:ui].warn(" -- Failed to enable static nat: #{resp['enablestaticnatresponse']['errortext']}")
               return
             end
-          rescue Fog::Compute::Cosmic::Error => e
-            raise Errors::FogError, :message => e.message
+          rescue Fog::Cosmic::Compute::Error => e
+            raise Fog::Cosmic::Compute::Error, :message => e.message
           end
 
           # Save ipaddress id to the data dir so it can be disabled when the instance is destroyed
@@ -442,11 +442,11 @@ module VagrantPlugins
                   f.write("#{rule[:publicport]}")
                 end
               end
-            rescue Errors::FogError => e
+            rescue Fog::Cosmic::Compute::Error => e
               if pf_public_port.nil? && !(e.message =~ /The range specified,.*conflicts with rule.*which has/).nil?
                 raise DuplicatePFRule, :message => e.message
               else
-                raise Errors::FogError, :message => e.message
+                raise Fog::Cosmic::Compute::Error, :message => e.message
               end
             end
           end
@@ -493,8 +493,8 @@ module VagrantPlugins
                 sleep 2
               end
             end
-          rescue Fog::Compute::Cosmic::Error => e
-            raise Errors::FogError, :message => e.message
+          rescue Fog::Cosmic::Compute::Error => e
+            raise Fog::Cosmic::Compute::Error, :message => e.message
           end
 
           store_port_forwarding_rules(port_forwarding_rule)
@@ -722,13 +722,13 @@ module VagrantPlugins
                 sleep 2
               end
             end
-          rescue Fog::Compute::Cosmic::Error => e
+          rescue Fog::Cosmic::Compute::Error => e
             if e.message =~ /The range specified,.*conflicts with rule/
               @env[:ui].warn(" -- Failed to create firewall rule: #{e.message}")
             elsif e.message =~ /Default ACL cannot be modified/
               @env[:ui].warn(" -- Failed to create network acl: #{e.message}: #{acl_name}")
             else
-              raise Errors::FogError, :message => e.message
+              raise Fog::Cosmic::Compute::Error, :message => e.message
             end
           end
           firewall_rule

@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'vagrant-cosmic/action/read_transport_info'
 require 'vagrant-cosmic/config'
-require 'fog'
+require 'fog/cosmic'
 
 describe VagrantPlugins::Cosmic::Action::ReadTransportInfo do
   let(:action) {VagrantPlugins::Cosmic::Action::ReadTransportInfo.new }
@@ -9,7 +9,7 @@ describe VagrantPlugins::Cosmic::Action::ReadTransportInfo do
   describe '#retrieve_public_ip_port' do
     subject { action.retrieve_public_ip_port(cosmic_compute, domain_config, machine) }
 
-    let(:cosmic_compute) { double('Fog::Compute::Cosmic') }
+    let(:cosmic_compute) { double('Fog::Cosmic::Compute') }
     let(:machine) { double('Vagrant::Machine')}
 
     let(:data_dir) { double('Pathname') }

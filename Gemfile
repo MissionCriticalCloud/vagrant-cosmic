@@ -6,13 +6,14 @@ group :development do
   # We depend on Vagrant for development, but we don't add it as a
   # gem dependency because we expect to be installed within the
   # Vagrant environment itself using `vagrant plugin`.
-  gem 'vagrant', git: 'https://github.com/mitchellh/vagrant.git', tag: 'v2.0.3'
+  gem 'vagrant', git: 'https://github.com/hashicorp/vagrant.git', ref: "v2.2.4"
   gem 'coveralls', require: false
-  gem 'simplecov', require: false
+  gem 'pry'
   gem 'rspec-core'
   gem 'rspec-expectations'
   gem 'rspec-its'
   gem 'rspec-mocks'
+  gem 'simplecov', require: false
 end
 
 group :plugins do

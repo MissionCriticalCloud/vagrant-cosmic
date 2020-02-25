@@ -3,14 +3,14 @@ require 'vagrant-cosmic/action/terminate_instance'
 require 'vagrant-cosmic/config'
 
 require 'vagrant'
-require 'fog'
+require 'fog/cosmic'
 
 describe VagrantPlugins::Cosmic::Action::TerminateInstance do
   let(:action) { VagrantPlugins::Cosmic::Action::TerminateInstance.new(app, env) }
 
   let(:destroy_server_response) { { id: JOB_ID } }
 
-  let(:cs_job) { double('Fog::Compute::Cosmic::Job') }
+  let(:cs_job) { double('Fog::Cosmic::Compute::Job') }
 
   let(:fake_job_result) do
     {
@@ -47,9 +47,9 @@ describe VagrantPlugins::Cosmic::Action::TerminateInstance do
     let(:a_path) { double('Pathname') }
     let(:file) { double('File') }
 
-    let(:cosmic_compute) { double('Fog::Compute::Cosmic') }
-    let(:servers) { double('Fog::Compute::Cosmic::Servers') }
-    let(:server) { double('Fog::Compute::Cosmic::Server') }
+    let(:cosmic_compute) { double('Fog::Cosmic::Compute') }
+    let(:servers) { double('Fog::Cosmic::Compute::Servers') }
+    let(:server) { double('Fog::Cosmic::Compute::Server') }
     let(:ui) { double('Vagrant::UI::Prefixed') }
     let(:root_path) { double('Pathname') }
     let(:env) do
@@ -205,8 +205,8 @@ describe VagrantPlugins::Cosmic::Action::TerminateInstance do
 
       context 'with security groups removal' do
         let(:security_group_path) { double('Pathname') }
-        let(:cosmic_securitygroups) { double('Fog::Compute::Cosmic::SecurityGroups') }
-        let(:cosmic_securitygroup) { double('Fog::Compute::Cosmic::SecurityGroup') }
+        let(:cosmic_securitygroups) { double('Fog::Cosmic::Compute::SecurityGroups') }
+        let(:cosmic_securitygroup) { double('Fog::Cosmic::Compute::SecurityGroup') }
         RULE_ID_INGRESS = 'UUID of Ingress Rule'.freeze
         RULE_ID_EGRESS = 'UUID of Egress Rule'.freeze
 

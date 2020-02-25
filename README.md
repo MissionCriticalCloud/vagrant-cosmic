@@ -8,7 +8,7 @@
 
 This is a fork of [mitchellh AWS Provider](https://github.com/mitchellh/vagrant-aws/).
 
-This is a [Vagrant](http://www.vagrantup.com) 1.5+ plugin that adds a `cosmic`
+This is a [Vagrant](http://www.vagrantup.com) 2.2+ plugin that adds a `cosmic`
 provider to Vagrant for use with [Cosmic](https://github.com/MissionCriticalCloud/cosmic).
 
 ## Features
@@ -19,7 +19,7 @@ provider to Vagrant for use with [Cosmic](https://github.com/MissionCriticalClou
 
 ## Usage
 
-Install using standard Vagrant 1.1+ plugin installation methods. After
+Install using standard Vagrant 2.2+ plugin installation methods. After
 installing, `vagrant up` and specify the `cosmic` provider. An example is
 shown below.
 

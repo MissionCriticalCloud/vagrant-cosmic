@@ -3,7 +3,7 @@ require 'vagrant-cosmic/action/run_instance'
 require 'vagrant-cosmic/config'
 
 require 'vagrant'
-require 'fog'
+require 'fog/cosmic'
 
 describe VagrantPlugins::Cosmic::Action::RunInstance do
   let(:action) { VagrantPlugins::Cosmic::Action::RunInstance.new(app, env) }
@@ -224,9 +224,9 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
     let(:file) { double('File') }
     let(:communicator) { double('VagrantPlugins::CommunicatorSSH::Communicator') }
     let(:communicator_config) { double('VagrantPlugins::...::...Config') }
-    let(:cosmic_compute) { double('Fog::Compute::Cosmic') }
-    let(:servers) { double('Fog::Compute::Cosmic::Servers') }
-    let(:server) { double('Fog::Compute::Cosmic::Server') }
+    let(:cosmic_compute) { double('Fog::Cosmic::Compute') }
+    let(:servers) { double('Fog::Cosmic::Compute::Servers') }
+    let(:server) { double('Fog::Cosmic::Compute::Server') }
     let(:ui) { double('Vagrant::UI::Prefixed') }
     let(:root_path) { double('Pathname') }
     let(:env) do
@@ -239,7 +239,7 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
     end
 
     let(:cosmic_zone) do
-      instance_double('Fog::Compute::Cosmic::Zone',
+      instance_double('Fog::Cosmic::Compute::Zone',
                       id: ZONE_ID,
                       name: ZONE_NAME,
                       network_type: network_type,
@@ -411,7 +411,7 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
       context 'with additional data disk' do
         let(:disk_offering_name) { DISK_OFFERING_NAME }
         let(:create_servers_parameters) { super().merge('disk_offering_id' => DISK_OFFERING_ID) }
-        let(:volume) { double('Fog::Compute::Cosmic::Volume') }
+        let(:volume) { double('Fog::Cosmic::Compute::Volume') }
 
         before(:each) do
           allow(cosmic_compute).to receive(:send).with(:list_disk_offerings, listall: true, name: DISK_OFFERING_NAME)
@@ -511,7 +511,7 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
               expect(cosmic_compute).to receive(:create_port_forwarding_rule)
                 .with(create_port_forwarding_rule_parameters.merge(publicport: PF_RANDOM_START - 1))
                 .and_raise(
-                  Fog::Compute::Cosmic::Error,
+                  Fog::Cosmic::Compute::Error,
                   'The range specified, CONFLICTINGRANGE, conflicts with rule SOMERULE which has THESAME'
                 )
             end

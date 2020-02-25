@@ -47,7 +47,7 @@ module VagrantPlugins
                    :timeout => domain_config.instance_ready_timeout
               end
             end
-          rescue Fog::Compute::Cosmic::Error => e
+          rescue Fog::Cosmic::Compute::Error => e
             raise Errors::FogError, :message => e.message
           end
 

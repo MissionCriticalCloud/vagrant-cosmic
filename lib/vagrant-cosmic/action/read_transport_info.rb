@@ -24,7 +24,7 @@ module VagrantPlugins
           if not pf_ip_address and pf_ip_address_id and pf_public_port
             begin
               response = cosmic.list_public_ip_addresses({:id => pf_ip_address_id})
-            rescue Fog::Compute::Cosmic::Error => e
+            rescue Fog::Cosmic::Compute::Error => e
               raise Errors::FogError, :message => e.message
             end
 

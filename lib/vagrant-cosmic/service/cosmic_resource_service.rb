@@ -54,7 +54,7 @@ module VagrantPlugins
           options = options.merge({'id' => resource_id})
           begin
             full_response = translate_from_to(resource_type, options)
-          rescue Fog::Compute::Cosmic::BadRequest => e
+          rescue Fog::Cosmic::Compute::BadRequest => e
             raise CosmicResourceNotFound.new("No Name found for #{resource_type} with UUID '#{resource_id}', #{e.class.to_s} reports:\n #{e.message}")
           end
           @resource_details = full_response[0]
