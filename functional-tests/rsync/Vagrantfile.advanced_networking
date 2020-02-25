@@ -12,28 +12,28 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ".", "/vagrant", type: "rsync",
   rsync__exclude: [".git/", "vendor"]
 
-  config.vm.provider :cloudstack do |cloudstack, override|
-    cloudstack.display_name = ENV['TEST_NAME']
+  config.vm.provider :cosmic do |cosmic, override|
+    cosmic.display_name = ENV['TEST_NAME']
 
-    cloudstack.host       = ENV['CLOUDSTACK_HOST']
-    cloudstack.path       = '/client/api'
-    cloudstack.port       = '443'
-    cloudstack.scheme     = 'https'
-    cloudstack.api_key    = ENV['CLOUDSTACK_API_KEY']
-    cloudstack.secret_key = ENV['CLOUDSTACK_SECRET_KEY']
-    cloudstack.expunge_on_destroy = ENV['EXPUNGE_ON_DESTROY']=="true"
+    cosmic.host       = ENV['COSMIC_HOST']
+    cosmic.path       = '/client/api'
+    cosmic.port       = '443'
+    cosmic.scheme     = 'https'
+    cosmic.api_key    = ENV['COSMIC_API_KEY']
+    cosmic.secret_key = ENV['COSMIC_SECRET_KEY']
+    cosmic.expunge_on_destroy = ENV['EXPUNGE_ON_DESTROY']=="true"
 
-    cloudstack.zone_name             = ENV['ZONE_NAME']
-    cloudstack.network_name          = ENV['NETWORK_NAME']
-    cloudstack.service_offering_name = ENV['SERVICE_OFFERING_NAME']
+    cosmic.zone_name             = ENV['ZONE_NAME']
+    cosmic.network_name          = ENV['NETWORK_NAME']
+    cosmic.service_offering_name = ENV['SERVICE_OFFERING_NAME']
 
-    cloudstack.pf_ip_address         = ENV['PUBLIC_SOURCE_NAT_IP']
-    cloudstack.pf_trusted_networks   = ENV['SOURCE_CIDR']
-    cloudstack.pf_open_firewall      = false
+    cosmic.pf_ip_address         = ENV['PUBLIC_SOURCE_NAT_IP']
+    cosmic.pf_trusted_networks   = ENV['SOURCE_CIDR']
+    cosmic.pf_open_firewall      = false
 
     unless ENV['SSH_KEY'].nil?
-        cloudstack.ssh_key               = ENV['SSH_KEY']
-        cloudstack.ssh_user              = ENV['SSH_USER']
+        cosmic.ssh_key               = ENV['SSH_KEY']
+        cosmic.ssh_user              = ENV['SSH_USER']
     end
   end
 

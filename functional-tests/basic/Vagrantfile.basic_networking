@@ -11,27 +11,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true, type: 'rsync' # if Vagrant::Util::Platform.windows?
   config.vm.box = ENV['LINUX_TEMPLATE_NAME']
 
-  config.vm.provider :cloudstack do |cloudstack, override|
-    cloudstack.display_name = ENV['TEST_NAME']
+  config.vm.provider :cosmic do |cosmic, override|
+    cosmic.display_name = ENV['TEST_NAME']
 
-    cloudstack.host       = ENV['CLOUDSTACK_HOST']
-    cloudstack.path       = '/client/api'
-    cloudstack.port       = '8080'
-    cloudstack.scheme     = 'http'
-    cloudstack.api_key    = ENV['CLOUDSTACK_API_KEY']
-    cloudstack.secret_key = ENV['CLOUDSTACK_SECRET_KEY']
+    cosmic.host       = ENV['COSMIC_HOST']
+    cosmic.path       = '/client/api'
+    cosmic.port       = '8080'
+    cosmic.scheme     = 'http'
+    cosmic.api_key    = ENV['COSMIC_API_KEY']
+    cosmic.secret_key = ENV['COSMIC_SECRET_KEY']
 
-    cloudstack.zone_name             = ENV['ZONE_NAME']
-    cloudstack.network_name          = ENV['NETWORK_NAME']
-    cloudstack.service_offering_name = ENV['SERVICE_OFFERING_NAME']
+    cosmic.zone_name             = ENV['ZONE_NAME']
+    cosmic.network_name          = ENV['NETWORK_NAME']
+    cosmic.service_offering_name = ENV['SERVICE_OFFERING_NAME']
 
 
-    cloudstack.expunge_on_destroy    = ENV['CS_EXPUNGE'] == "true"
-    cloudstack.network_type          = "Ignored"
-    cloudstack.ssh_key               = ENV['SSH_KEY'] unless ENV['SSH_KEY'].nil?
-    cloudstack.ssh_user              = ENV['SSH_USER'] unless ENV['SSH_USER'].nil?
+    cosmic.expunge_on_destroy    = ENV['CS_EXPUNGE'] == "true"
+    cosmic.network_type          = "Ignored"
+    cosmic.ssh_key               = ENV['SSH_KEY'] unless ENV['SSH_KEY'].nil?
+    cosmic.ssh_user              = ENV['SSH_USER'] unless ENV['SSH_USER'].nil?
 
-    cloudstack.security_groups       = [{
+    cosmic.security_groups       = [{
                                                 :name         => "Awesome_security_group1",
                                                 :description  => "Created from the Vagrantfile",
                                                 :rules        => [{:type => "ingress", :protocol => "TCP", :startport => 23, :endport => 23, :cidrlist => "0.0.0.0/0"}]
