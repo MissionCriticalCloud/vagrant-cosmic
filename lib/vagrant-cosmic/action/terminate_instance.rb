@@ -48,8 +48,6 @@ module VagrantPlugins
           # Remove keyname from cosmic
           remove_generated_ssh_key(env)
 
-          remove_security_groups(env)
-
           env[:machine].id = nil
 
           env[:ui].info(I18n.t('vagrant_cosmic.terminateinstance_done'))
@@ -66,7 +64,7 @@ module VagrantPlugins
                 resp = env[:cosmic_compute].detach_volume({:id => volume_id})
                 job_id = resp['detachvolumeresponse']['jobid']
                 wait_for_job_ready(env, job_id)
-              rescue Fog::Compute::Cosmic::Error => e
+              rescue Fog::Cosmic::Compute::Error => e
                 if e.message =~ /Unable to execute API command detachvolume.*entity does not exist/
                   env[:ui].warn(I18n.t('vagrant_cosmic.detach_volume_failed', message: e.message))
                 else
@@ -77,41 +75,6 @@ module VagrantPlugins
               env[:ui].warn(I18n.t('vagrant_cosmic.detach_volume_failed', volume_id: volume_id)) unless resp['deletevolumeresponse']['success'] == 'true'
             end
             volumes_file.delete
-          end
-        end
-
-        def remove_security_groups(env)
-          security_groups_file = env[:machine].data_dir.join('security_groups')
-          if security_groups_file.file?
-            File.read(security_groups_file).each_line do |line|
-              security_group_id = line.strip
-              begin
-                security_group = env[:cosmic_compute].security_groups.get(security_group_id)
-
-                security_group.ingress_rules.each do |ir|
-                  env[:cosmic_compute].revoke_security_group_ingress({:id => ir['ruleid']})
-                end
-                env[:ui].info('Deleted ingress rules')
-
-                security_group.egress_rules.each do |er|
-                  env[:cosmic_compute].revoke_security_group_egress({:id => er['ruleid']})
-                end
-                env[:ui].info('Deleted egress rules')
-
-              rescue Fog::Compute::Cosmic::Error => e
-                raise Errors::FogError, :message => e.message
-              end
-
-              begin
-                env[:cosmic_compute].delete_security_group({:id => security_group_id})
-              rescue Fog::Compute::Cosmic::Error => e
-                env[:ui].warn("Couldn't delete group right now.")
-                env[:ui].warn('Waiting 30 seconds to retry')
-                sleep 30
-                retry
-              end
-            end
-            security_groups_file.delete
           end
         end
 
@@ -127,7 +90,7 @@ module VagrantPlugins
             begin
               response = env[:cosmic_compute].delete_ssh_key_pair(name: sshkeyname)
               env[:ui].warn(I18n.t('vagrant_cosmic.ssh_key_pair_no_success_removing', name: sshkeyname)) unless response['deletesshkeypairresponse']['success'] == 'true'
-            rescue Fog::Compute::Cosmic::Error => e
+            rescue Fog::Cosmic::Compute::Error => e
               env[:ui].warn(I18n.t('vagrant_cosmic.errors.fog_error', :message => e.message))
             end
             sshkeyname_file.delete
@@ -149,7 +112,7 @@ module VagrantPlugins
                 resp = env[:cosmic_compute].delete_port_forwarding_rule({:id => rule_id})
                 job_id = resp['deleteportforwardingruleresponse']['jobid']
                 wait_for_job_ready(env, job_id)
-              rescue Fog::Compute::Cosmic::Error => e
+              rescue Fog::Cosmic::Compute::Error => e
                 if e.message =~ /Unable to execute API command deleteportforwardingrule.*entity does not exist/
                   env[:ui].warn(" -- Failed to delete portforwarding rule: #{e.message}")
                 else
@@ -183,7 +146,7 @@ module VagrantPlugins
                 resp = env[:cosmic_compute].request(options)
                 job_id = resp['disablestaticnatresponse']['jobid']
                 wait_for_job_ready(env, job_id)
-              rescue Fog::Compute::Cosmic::Error => e
+              rescue Fog::Cosmic::Compute::Error => e
                 raise Errors::FogError, :message => e.message
               end
             end
@@ -216,7 +179,7 @@ module VagrantPlugins
                 resp = env[:cosmic_compute].request(options)
                 job_id = resp[response_string]['jobid']
                 wait_for_job_ready(env, job_id)
-              rescue Fog::Compute::Cosmic::Error => e
+              rescue Fog::Cosmic::Compute::Error => e
                 if e.message =~ /Unable to execute API command deletefirewallrule.*entity does not exist/
                   env[:ui].warn(" -- Failed to delete #{type_string}: #{e.message}")
                 else

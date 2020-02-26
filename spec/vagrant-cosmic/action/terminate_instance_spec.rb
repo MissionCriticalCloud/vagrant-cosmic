@@ -3,14 +3,14 @@ require 'vagrant-cosmic/action/terminate_instance'
 require 'vagrant-cosmic/config'
 
 require 'vagrant'
-require 'fog'
+require 'fog/cosmic'
 
 describe VagrantPlugins::Cosmic::Action::TerminateInstance do
   let(:action) { VagrantPlugins::Cosmic::Action::TerminateInstance.new(app, env) }
 
   let(:destroy_server_response) { { id: JOB_ID } }
 
-  let(:cs_job) { double('Fog::Compute::Cosmic::Job') }
+  let(:cs_job) { double('Fog::Cosmic::Compute::Job') }
 
   let(:fake_job_result) do
     {
@@ -47,9 +47,9 @@ describe VagrantPlugins::Cosmic::Action::TerminateInstance do
     let(:a_path) { double('Pathname') }
     let(:file) { double('File') }
 
-    let(:cosmic_compute) { double('Fog::Compute::Cosmic') }
-    let(:servers) { double('Fog::Compute::Cosmic::Servers') }
-    let(:server) { double('Fog::Compute::Cosmic::Server') }
+    let(:cosmic_compute) { double('Fog::Cosmic::Compute') }
+    let(:servers) { double('Fog::Cosmic::Compute::Servers') }
+    let(:server) { double('Fog::Cosmic::Compute::Server') }
     let(:ui) { double('Vagrant::UI::Prefixed') }
     let(:root_path) { double('Pathname') }
     let(:env) do
@@ -196,47 +196,6 @@ describe VagrantPlugins::Cosmic::Action::TerminateInstance do
             .and_return('deletesshkeypairresponse' => { 'success' => 'true' })
 
           expect(ssh_key_path).to receive(:delete).and_return(true)
-        end
-
-        it 'destroys a vm' do
-          should eq true
-        end
-      end
-
-      context 'with security groups removal' do
-        let(:security_group_path) { double('Pathname') }
-        let(:cosmic_securitygroups) { double('Fog::Compute::Cosmic::SecurityGroups') }
-        let(:cosmic_securitygroup) { double('Fog::Compute::Cosmic::SecurityGroup') }
-        RULE_ID_INGRESS = 'UUID of Ingress Rule'.freeze
-        RULE_ID_EGRESS = 'UUID of Egress Rule'.freeze
-
-        before(:each) do
-          expect(data_dir).to receive(:join).with('security_groups').and_return(security_group_path)
-          expect(security_group_path).to receive(:file?).and_return(true)
-          allow(File).to receive(:read)
-            .and_return("#{SECURITY_GROUP_ID}\n")
-
-          expect(cosmic_compute).to receive(:security_groups).and_return(cosmic_securitygroups)
-          expect(cosmic_securitygroups).to receive(:get)
-            .with(SECURITY_GROUP_ID)
-            .and_return(cosmic_securitygroup)
-
-          expect(cosmic_securitygroup).to receive(:ingress_rules)
-            .and_return([{ 'ruleid' => RULE_ID_INGRESS }])
-          expect(cosmic_compute).to receive(:revoke_security_group_ingress)
-            .with(id: RULE_ID_INGRESS)
-            .and_return('revokesecuritygroupingressresponse' => { 'jobid' => JOB_ID })
-
-          expect(cosmic_securitygroup).to receive(:egress_rules)
-            .and_return([{ 'ruleid' => RULE_ID_EGRESS }])
-          expect(cosmic_compute).to receive(:revoke_security_group_egress)
-            .with(id: RULE_ID_EGRESS)
-            .and_return('revokesecuritygroupegressresponse' => { 'jobid' => JOB_ID })
-
-          expect(cosmic_compute).to receive(:delete_security_group)
-            .with(id: SECURITY_GROUP_ID)
-
-          expect(security_group_path).to receive(:delete).and_return(true)
         end
 
         it 'destroys a vm' do

@@ -6,7 +6,7 @@ include VagrantPlugins::Cosmic::Model
 include VagrantPlugins::Cosmic::Service
 
 describe CosmicResourceService do
-  let(:cosmic_compute) { double('Fog::Compute::Cosmic') }
+  let(:cosmic_compute) { double('Fog::Cosmic::Compute') }
   let(:ui) { double('Vagrant::UI') }
   let(:service) { CosmicResourceService.new(cosmic_compute, ui) }
 

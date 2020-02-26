@@ -43,11 +43,8 @@ describe VagrantPlugins::Cosmic::Config do
     its("pf_trusted_networks")    { should be_nil  }
     its("port_forwarding_rules")  { should == []   }
     its("firewall_rules")         { should == []   }
-    its("security_group_ids")     { should == []   }
     its("display_name")           { should be_nil  }
     its("group")                  { should be_nil  }
-    its("security_group_names")   { should == []   }
-    its("security_groups")        { should == []   }
     its("user_data")              { should be_nil  }
     its("ssh_key")                { should be_nil  }
     its("ssh_user")               { should be_nil  }
@@ -153,11 +150,8 @@ describe VagrantPlugins::Cosmic::Config do
     let(:config_pf_trusted_networks)    { ["foo", "bar"] }
     let(:config_port_forwarding_rules)  { [{:foo => "bar"}, {:bar => "foo"}] }
     let(:config_firewall_rules)         { [{:foo => "bar"}, {:bar => "foo"}] }
-    let(:config_security_group_ids)     { ["foo", "bar"] }
     let(:config_display_name)           { "foo" }
     let(:config_group)                  { "foo" }
-    let(:config_security_group_names)   { ["foo", "bar"] }
-    let(:config_security_groups)        { [{:foo => "bar"}, {:bar => "foo"}] }
     let(:config_ssh_key)                { "./foo.pem" }
     let(:config_ssh_user)               { "foo" }
     let(:config_vm_user)                { "foo" }
@@ -193,11 +187,8 @@ describe VagrantPlugins::Cosmic::Config do
       instance.pf_trusted_networks    = config_pf_trusted_networks
       instance.port_forwarding_rules  = config_port_forwarding_rules
       instance.firewall_rules         = config_firewall_rules
-      instance.security_group_ids     = config_security_group_ids
       instance.display_name           = config_display_name
       instance.group                  = config_group
-      instance.security_group_names   = config_security_group_names
-      instance.security_groups        = config_security_groups
       instance.ssh_key                = config_ssh_key
       instance.ssh_user               = config_ssh_user
       instance.vm_user                = config_vm_user
@@ -250,11 +241,8 @@ describe VagrantPlugins::Cosmic::Config do
       its("pf_open_firewall")       { should == config_pf_open_firewall }
       its("port_forwarding_rules")  { should == config_port_forwarding_rules }
       its("firewall_rules")         { should == config_firewall_rules }
-      its("security_group_ids")     { should == config_security_group_ids }
       its("display_name")           { should == config_display_name }
       its("group")                  { should == config_group }
-      its("security_group_names")   { should == config_security_group_names }
-      its("security_groups")        { should == config_security_groups }
       its("ssh_key")                { should == config_ssh_key }
       its("ssh_user")               { should == config_ssh_user }
       its("vm_user")                { should == config_vm_user }
@@ -306,11 +294,8 @@ describe VagrantPlugins::Cosmic::Config do
       its("pf_trusted_networks")    { should == config_pf_trusted_networks}
       its("port_forwarding_rules")  { should == config_port_forwarding_rules }
       its("firewall_rules")         { should == config_firewall_rules }
-      its("security_group_ids")     { should == config_security_group_ids }
       its("display_name")           { should == config_display_name }
       its("group")                  { should == config_group }
-      its("security_group_names")   { should == config_security_group_names }
-      its("security_groups")        { should == config_security_groups }
       its("ssh_key")                { should == config_ssh_key }
       its("ssh_user")               { should == config_ssh_user }
       its("vm_user")                { should == config_vm_user }

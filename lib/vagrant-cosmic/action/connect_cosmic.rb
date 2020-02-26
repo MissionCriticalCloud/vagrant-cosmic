@@ -1,4 +1,4 @@
-require 'fog'
+require 'fog/cosmic'
 require 'log4r'
 
 module VagrantPlugins
