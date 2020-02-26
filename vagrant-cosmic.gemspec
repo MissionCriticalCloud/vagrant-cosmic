@@ -6,11 +6,11 @@ Gem::Specification.new do |s|
   s.version       = VagrantPlugins::Cosmic::VERSION
   s.platform      = Gem::Platform::RUBY
   s.license       = 'MIT'
-  s.authors       = ['Mitchell Hashimoto', 'Carl Loa Odin', 'Tor-Åke Fransson', 'Olle Lundberg', 'Roeland Kuipers', 'Yuichi Uemura', 'Atsushi Sasaki', 'Nicolas Brechet', 'Peter Jönsson', 'Christophe Roux', 'Andrei Chiriaev', 'Miguel Ferreira', 'Timothy van Zadelhoff', 'Geurt Schimmel', 'Bob van den Heuvel']
-  s.email         = 'int-toolkit@schubergphilis.com'
+  s.authors       = ['Mitchell Hashimoto', 'Carl Loa Odin', 'Tor-Åke Fransson', 'Olle Lundberg', 'Roeland Kuipers', 'Yuichi Uemura', 'Atsushi Sasaki', 'Nicolas Brechet', 'Peter Jönsson', 'Christophe Roux', 'Andrei Chiriaev', 'Miguel Ferreira', 'Timothy van Zadelhoff', 'Geurt Schimmel', 'Bob van den Heuvel', 'Stephen Hoekstra']
+  s.email         = 'int-cloud@schubergphilis.com'
   s.homepage      = 'https://github.com/MissionCriticalCloud/vagrant-cosmic/'
   s.summary       = 'Enables Vagrant to manage machines in Cosmic.'
-  s.description   = 'Provides a cosmic provider in Vagrant via which Vagrant can manage machines in Cosmic.'
+  s.description   = 'Provides a Cosmic provider for Vagrant to manage virtual machines in Cosmic.'
 
   s.required_rubygems_version = '>= 1.3.6'
   s.rubyforge_project         = 'vagrant-cosmic'

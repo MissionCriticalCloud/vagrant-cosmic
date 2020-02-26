@@ -28,7 +28,7 @@ GIT
 PATH
   remote: .
   specs:
-    vagrant-cosmic (1.5.2)
+    vagrant-cosmic (0.1.0)
       fog-cosmic (~> 0.1.0)
 
 GEM
