@@ -57,7 +57,6 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
   end
 
   let(:network_type) { NETWORK_TYPE_ADVANCED }
-  let(:security_groups_enabled) { SECURITY_GROUPS_DISABLED }
   let(:list_zones_response) do
     {
       'listzonesresponse' => {
@@ -69,7 +68,6 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
             'id' => ZONE_ID,
             'name' => ZONE_NAME,
             'networktype' => network_type,
-            'securitygroupsenabled' => security_groups_enabled
           }
         ]
       }
@@ -242,8 +240,7 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
       instance_double('Fog::Cosmic::Compute::Zone',
                       id: ZONE_ID,
                       name: ZONE_NAME,
-                      network_type: network_type,
-                      security_groups_enabled: security_groups_enabled)
+                      network_type: network_type)
     end
 
     before(:each) do
@@ -278,7 +275,6 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
     end
 
     context 'in basic zone' do
-      let(:security_groups) { [] }
       let(:network_name) { nil }
       let(:provider_config) do
         config = VagrantPlugins::Cosmic::Config.new
@@ -288,14 +284,12 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
           cfg.template_name = template_name
           cfg.display_name = DISPLAY_NAME
           cfg.ssh_key = ssh_key
-          cfg.security_groups = security_groups
           cfg.network_name = network_name
         end
         config.finalize!
         config.get_domain_config(:cosmic)
       end
       let(:network_type) { NETWORK_TYPE_BASIC }
-      let(:security_groups_enabled) { SECURITY_GROUPS_ENABLED }
 
       let(:create_servers_parameters) do
         {
@@ -308,37 +302,6 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
       end
 
       context 'a basic configuration' do
-        it 'starts a vm' do
-          should eq true
-        end
-      end
-
-      context 'with inline security groups' do
-        let(:sg_rule) { { protocol: 'TCP', startport: 23, endport: 23, cidrlist: '0.0.0.0/0' } }
-
-        let(:create_servers_parameters) { super().merge('security_group_ids' => SECURITY_GROUP_ID) }
-        let(:security_groups) do
-          [
-            {
-              name: SECURITY_GROUP_NAME, description: SECURITY_GROUP_DESC,
-              rules: [sg_rule.merge(type: 'ingress')]
-            }
-          ]
-        end
-
-        before(:each) do
-          allow(cosmic_compute).to receive(:create_security_group)
-            .with(name: SECURITY_GROUP_NAME, description: SECURITY_GROUP_DESC)
-            .and_return('createsecuritygroupresponse' => { 'securitygroup' => { 'id' => SECURITY_GROUP_ID } })
-
-          allow(cosmic_compute).to receive(:send).with(:authorize_security_group_ingress,
-                                                           { securityGroupId: SECURITY_GROUP_ID }.merge(sg_rule))
-            .and_return(
-              'authorizesecuritygroupingressresponse' => { 'jobid' => '0b6c2c41-f0c8-43b5-be1d-9d5957873cf9' }
-            )
-          expect(file).to receive(:write).with("#{SECURITY_GROUP_ID}\n")
-        end
-
         it 'starts a vm' do
           should eq true
         end

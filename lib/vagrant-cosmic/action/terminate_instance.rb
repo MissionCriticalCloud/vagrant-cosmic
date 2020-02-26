@@ -48,8 +48,6 @@ module VagrantPlugins
           # Remove keyname from cosmic
           remove_generated_ssh_key(env)
 
-          remove_security_groups(env)
-
           env[:machine].id = nil
 
           env[:ui].info(I18n.t('vagrant_cosmic.terminateinstance_done'))
@@ -77,41 +75,6 @@ module VagrantPlugins
               env[:ui].warn(I18n.t('vagrant_cosmic.detach_volume_failed', volume_id: volume_id)) unless resp['deletevolumeresponse']['success'] == 'true'
             end
             volumes_file.delete
-          end
-        end
-
-        def remove_security_groups(env)
-          security_groups_file = env[:machine].data_dir.join('security_groups')
-          if security_groups_file.file?
-            File.read(security_groups_file).each_line do |line|
-              security_group_id = line.strip
-              begin
-                security_group = env[:cosmic_compute].security_groups.get(security_group_id)
-
-                security_group.ingress_rules.each do |ir|
-                  env[:cosmic_compute].revoke_security_group_ingress({:id => ir['ruleid']})
-                end
-                env[:ui].info('Deleted ingress rules')
-
-                security_group.egress_rules.each do |er|
-                  env[:cosmic_compute].revoke_security_group_egress({:id => er['ruleid']})
-                end
-                env[:ui].info('Deleted egress rules')
-
-              rescue Fog::Cosmic::Compute::Error => e
-                raise Errors::FogError, :message => e.message
-              end
-
-              begin
-                env[:cosmic_compute].delete_security_group({:id => security_group_id})
-              rescue Fog::Cosmic::Compute::Error => e
-                env[:ui].warn("Couldn't delete group right now.")
-                env[:ui].warn('Waiting 30 seconds to retry')
-                sleep 30
-                retry
-              end
-            end
-            security_groups_file.delete
           end
         end
 

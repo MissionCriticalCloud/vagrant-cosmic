@@ -19,7 +19,6 @@ module VagrantPlugins
           @app              = app
           @logger           = Log4r::Logger.new('vagrant_cosmic::action::run_instance')
           @resource_service = CosmicResourceService.new(env[:cosmic_compute], env[:ui])
-          @security_groups = []
         end
 
         def call(env)
@@ -71,8 +70,6 @@ module VagrantPlugins
 
           cs_zone = @env[:cosmic_compute].zones.find {|f| f.id == @zone.id}
           resolve_network(cs_zone)
-
-          resolve_security_groups(cs_zone)
 
           @domain_config.display_name = generate_display_name if @domain_config.display_name.nil?
 
@@ -144,80 +141,6 @@ module VagrantPlugins
           end
         end
 
-        def resolve_security_groups(cs_zone)
-          if cs_zone.security_groups_enabled
-            prepare_security_groups
-          else
-            if !@domain_config.security_group_ids.empty? || !@domain_config.security_group_names.empty? || !@domain_config.security_groups.empty?
-              @env[:ui].warn(I18n.t('vagrant_cosmic.security_groups_disabled', :zone_name => @zone.name))
-            end
-            @domain_config.security_group_ids = []
-            @domain_config.security_group_names = []
-            @domain_config.security_groups = []
-          end
-        end
-
-        def prepare_security_groups
-          # Can't use Security Group IDs and Names at the same time
-          # Let's use IDs by default...
-          if @domain_config.security_group_ids.empty? and !@domain_config.security_group_names.empty?
-            @security_groups = @domain_config.security_group_names.map do |name|
-              group = CosmicResource.new(nil, name, 'security_group')
-              @resource_service.sync_resource(group)
-              group
-            end
-          elsif !@domain_config.security_group_ids.empty?
-            @security_groups = @domain_config.security_group_ids.map do |id|
-              group = CosmicResource.new(id, nil, 'security_group')
-              @resource_service.sync_resource(group)
-              group
-            end
-          end
-
-          # Still no security group ids huh?
-          # Let's try to create some security groups from specifcation, if provided.
-          if !@domain_config.security_groups.empty? and @security_groups.empty?
-            @domain_config.security_groups.each do |security_group|
-              security_group = create_security_group( security_group)
-              @security_groups.push(security_group)
-            end
-          end
-        end
-
-        def create_security_group(security_group)
-          begin
-            sgid = @env[:cosmic_compute].create_security_group(:name        => security_group[:name],
-                                                                   :description => security_group[:description])['createsecuritygroupresponse']['securitygroup']['id']
-            security_group_object = CosmicResource.new(sgid, security_group[:name], 'security_group')
-            @env[:ui].info(" -- Security Group #{security_group[:name]} created with ID: #{sgid}")
-          rescue Exception => e
-            if e.message =~ /already exis/
-              security_group_object = CosmicResource.new(nil, security_group[:name], 'security_group')
-              @resource_service.sync_resource(security_group_object)
-              @env[:ui].info(" -- Security Group #{security_group_object.name} found with ID: #{security_group_object.id}")
-            end
-          end
-
-          # security group is created and we have it's ID
-          # so we add the rules... Does it really matter if they already exist ? Cosmic seems to take care of that!
-          security_group[:rules].each do |rule|
-            rule_options = {
-                :securityGroupId => security_group_object.id,
-                :protocol        => rule[:protocol],
-                :startport       => rule[:startport],
-                :endport         => rule[:endport],
-                :cidrlist        => rule[:cidrlist]
-            }
-
-            # The rule[:type] is either ingress or egress, but the method call looks the same.
-            # We build a dynamic method name and then send it off.
-            @env[:cosmic_compute].send("authorize_security_group_#{rule[:type]}".to_sym, rule_options)
-            @env[:ui].info(" --- #{rule[:type].capitalize} Rule added: #{rule[:protocol]} from #{rule[:startport]} to #{rule[:endport]} (#{rule[:cidrlist]})")
-          end
-
-          store_security_groups(security_group_object)
-        end
-
         def generate_display_name
           local_user = ENV['USER'] ? ENV['USER'].dup : 'VACS'
           local_user.gsub!(/[^-a-z0-9_]/i, '')
@@ -242,9 +165,6 @@ module VagrantPlugins
           end
           @env[:ui].info(" -- Keypair: #{@domain_config.keypair}") if @domain_config.keypair
           @env[:ui].info(' -- User Data: Yes') if @domain_config.user_data
-          @security_groups.each do |security_group|
-            @env[:ui].info(" -- Security Group: #{security_group.name} (#{security_group.id})")
-          end
         end
 
         def create_vm
@@ -284,7 +204,6 @@ module VagrantPlugins
             nets = @networks.map(&:id).compact.join(",")
             options['network_ids'] = nets unless nets.empty?
           end
-          options['security_group_ids'] = @security_groups.map {|security_group| security_group.id}.join(',') unless @security_groups.empty?
           options['project_id'] = @domain_config.project_id unless @domain_config.project_id.nil?
           options['key_name'] = @domain_config.keypair unless @domain_config.keypair.nil?
           options['name'] = @domain_config.name unless @domain_config.name.nil?
@@ -816,14 +735,6 @@ module VagrantPlugins
           port_forwarding_file.open('a+') do |f|
             f.write("#{port_forwarding_rule['id']}\n")
           end
-        end
-
-        def store_security_groups(security_group_object)
-          security_groups_file = @env[:machine].data_dir.join('security_groups')
-          security_groups_file.open('a+') do |f|
-            f.write("#{security_group_object.id}\n")
-          end
-          security_group_object
         end
 
         def wait_for_communicator_ready

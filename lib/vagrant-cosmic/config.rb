@@ -7,7 +7,7 @@ module VagrantPlugins
            template_id template_name zone_id zone_name keypair pf_ip_address_id pf_ip_address pf_public_port
            pf_public_rdp_port pf_private_port pf_trusted_networks display_name group user_data ssh_key ssh_user
            ssh_network_id ssh_network_name vm_user vm_password private_ip_address).freeze
-      INSTANCE_VAR_DEFAULT_EMPTY_ARRAY = %w(static_nat port_forwarding_rules firewall_rules security_group_ids security_group_names security_groups).freeze
+      INSTANCE_VAR_DEFAULT_EMPTY_ARRAY = %w(static_nat port_forwarding_rules firewall_rules).freeze
 
       # Cosmic API host.
       #
@@ -183,25 +183,6 @@ module VagrantPlugins
       #
       # @return [Array]
       attr_accessor :firewall_rules
-
-      # comma separated list of security groups id that going
-      # to be applied to the virtual machine.
-      #
-      # @return [Array]
-      attr_accessor :security_group_ids
-
-      # comma separated list of security groups name that going
-      # to be applied to the virtual machine.
-      #
-      # @return [Array]
-      attr_accessor :security_group_names
-
-      # comma separated list of security groups
-      # (hash with ingress/egress rules)
-      # to be applied to the virtual machine.
-      #
-      # @return [Array]
-      attr_accessor :security_groups
 
       # display name for the instance
       #

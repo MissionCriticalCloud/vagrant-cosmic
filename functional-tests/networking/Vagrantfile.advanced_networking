@@ -57,14 +57,6 @@ networks.each_pair do |net_name, net_options|
       ],
       # Trusted network as array, instead of string. Add some networks to make sure it's an (multi element) Array
       pf_trusted_networks: [ENV['SOURCE_CIDR'], ',172.31.1.172/32', '172.31.1.173/32'],
-      # Ignore security groups
-      security_groups: [{
-                            :name => "Awesome_security_group",
-                            :description => "Created from the Vagrantfile",
-                            :rules => [{:type => "ingress", :protocol => "TCP", :startport => 22, :endport => 22, :cidrlist => "0.0.0.0/0"}]
-                        }],
-      # Ignore security groups
-      security_group_names: ['default', 'Awesome_security_group'],
     }
 
     machines["#{net_name}box#{box_number+=1}"] = {
@@ -104,11 +96,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |global_config|
         cosmic.pf_public_port = options[:pf_public_port]    unless options[:pf_public_port].nil?
         cosmic.pf_private_port = options[:pf_private_port]  unless options[:pf_private_port].nil?
         cosmic.pf_open_firewall = false
-
-        # With Advanced networking, following Basic networking features should be ignored
-        cosmic.security_groups = options[:security_groups]            unless options[:security_groups].nil?
-        cosmic.security_group_names = options[:security_group_names]  unless options[:security_group_names].nil?
-        # With Advanced networking, following Basic networking features should be ignored
 
         cosmic.pf_trusted_networks = options[:pf_trusted_networks]      unless options[:pf_trusted_networks].nil?
         cosmic.firewall_rules = options[:firewall_rules]                unless options[:firewall_rules].nil?

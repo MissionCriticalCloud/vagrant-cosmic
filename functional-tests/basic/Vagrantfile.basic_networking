@@ -30,16 +30,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     cosmic.network_type          = "Ignored"
     cosmic.ssh_key               = ENV['SSH_KEY'] unless ENV['SSH_KEY'].nil?
     cosmic.ssh_user              = ENV['SSH_USER'] unless ENV['SSH_USER'].nil?
-
-    cosmic.security_groups       = [{
-                                                :name         => "Awesome_security_group1",
-                                                :description  => "Created from the Vagrantfile",
-                                                :rules        => [{:type => "ingress", :protocol => "TCP", :startport => 23, :endport => 23, :cidrlist => "0.0.0.0/0"}]
-                                        },
-                                        {
-                                                :name         => "Awesome_security_group2",
-                                                :description  => "Created from the Vagrantfile",
-                                                :rules        => [{:type => "ingress", :protocol => "TCP", :startport => 22, :endport => 22, :cidrlist => "0.0.0.0/0"}]
-                                        }]
   end
 end
