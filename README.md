@@ -1,12 +1,6 @@
 # Vagrant Cosmic Provider
 
-[![Build Status](https://travis-ci.org/MissionCriticalCloud/vagrant-cosmic.png?branch=master)](https://travis-ci.org/MissionCriticalCloud/vagrant-cosmic)
-[![Gem Version](https://badge.fury.io/rb/vagrant-cosmic.png)](http://badge.fury.io/rb/vagrant-cosmic)
-[![Code climate](https://codeclimate.com/github/MissionCriticalCloud/vagrant-cosmic.png)](https://codeclimate.com/github/MissionCriticalCloud/vagrant-cosmic)
-[![Coverage Status](https://coveralls.io/repos/github/MissionCriticalCloud/vagrant-cosmic/badge.svg?branch=master)](https://coveralls.io/github/MissionCriticalCloud/vagrant-cosmic?branch=master)
-[![BCH compliance](https://bettercodehub.com/edge/badge/MissionCriticalCloud/vagrant-cosmic?branch=master)](https://bettercodehub.com/)
-
-This is a fork of [mitchellh AWS Provider](https://github.com/mitchellh/vagrant-aws/).
+This is a fork of the [CloudStack Vagrant provider](https://github.com/MissionCriticalCloud/vagrant-cloudstack).
 
 This is a [Vagrant](http://www.vagrantup.com) 2.2+ plugin that adds a `cosmic`
 provider to Vagrant for use with [Cosmic](https://github.com/MissionCriticalCloud/cosmic).
@@ -23,10 +17,13 @@ Install using standard Vagrant 2.2+ plugin installation methods. After
 installing, `vagrant up` and specify the `cosmic` provider. An example is
 shown below.
 
-```
+```shell
 $ vagrant plugin install vagrant-cosmic
+
 ...
+
 $ vagrant up --provider=cosmic
+
 ...
 ```
 
@@ -36,7 +33,7 @@ After installing the plugin (instructions above), the quickest way to get
 started is to actually make a Vagrantfile that looks like the following, filling in
 your information where necessary.
 
-```
+```ruby
 Vagrant.configure("2") do |config|
   config.vm.box = "${cosmic.template_name}"
 
@@ -59,7 +56,7 @@ end
 
 Or with names instead of ids:
 
-```
+```ruby
 Vagrant.configure("2") do |config|
   config.vm.box = "${cosmic.template_name}"
 
@@ -76,7 +73,7 @@ Vagrant.configure("2") do |config|
     cosmic.network_name = "WOW-SUCH-FAST-OFFERING"
     cosmic.zone_name = "District-9"
     cosmic.name = "doge-is-a-hostname-now"
-    # Sadly there is currently no support for the project api in fog.
+    # Sadly there is currently no support for the project API in fog.
     cosmic.project_id = "AAAAAAAAAAAAAAAAAAA"
   end
 end
@@ -102,15 +99,15 @@ to update UUIDs in your Vagrantfile. If both are specified, the id parameter tak
 * `path` - Cosmic API path
 * `port` - Cosmic API port
 * `scheme` - Cosmic API scheme _(defaults: https (thanks to the resolution order in fog))_
-* `api_key` - The api key for accessing Cosmic
+* `api_key` - The API key for accessing Cosmic
 * `secret_key` - The secret key for accessing Cosmic
 * `instance_ready_timeout` - The number of seconds to wait for the instance
   to become "ready" in Cosmic. Defaults to 120 seconds.
 * `domain_id` - Domain id to launch the instance into
 * `network_id` - Network uuid(s) that the instance should use
-  - `network_id` is single value (e.g. `"AAAA"`) or multiple values (e.g. `["AAAA", "BBBB"]`)
+  * `network_id` is single value (e.g. `"AAAA"`) or multiple values (e.g. `["AAAA", "BBBB"]`)
 * `network_name` - Network name(s) that the instance should use
-  - `network_name` is single value (e.g. `"AAAA"`) or multiple values (e.g. `["AAAA", "BBBB"]`)
+  * `network_name` is single value (e.g. `"AAAA"`) or multiple values (e.g. `["AAAA", "BBBB"]`)
 * `project_id` - Project uuid that the instance should belong to
 * `service_offering_id`- Service offering uuid to use for the instance
 * `service_offering_name`- Service offering name to use for the instance
@@ -127,9 +124,9 @@ to update UUIDs in your Vagrantfile. If both are specified, the id parameter tak
 * `pf_public_port_randomrange` - If public port is omited, a port from this range wll be used (default `{:start=>49152, :end=>65535}`)
 * `pf_private_port` - Private port for port forwarding rule (defaults to respective Communicator protocol)
 * `pf_open_firewall` - Flag to enable/disable automatic open firewall rule (by Cosmic)
-* `pf_trusted_networks` - Array of CIDRs or (array of) comma-separated string of CIDRs to network(s) to 
-  - automatically (by plugin) generate firewall rules for, ignored if `pf_open_firewall` set `true`
-  - use as default for firewall rules where source CIDR is missing
+* `pf_trusted_networks` - Array of CIDRs or (array of) comma-separated string of CIDRs to network(s) to
+  * automatically (by plugin) generate firewall rules for, ignored if `pf_open_firewall` set `true`
+  * use as default for firewall rules where source CIDR is missing
 * `port_forwarding_rules` - Port forwarding rules for the virtual machine
 * `firewall_rules` - Firewall rules
 * `display_name` - Display name for the instance
@@ -138,7 +135,7 @@ to update UUIDs in your Vagrantfile. If both are specified, the id parameter tak
 * `ssh_user` - User name to be used with ssh _(defaults to Vagrant's `config.ssh.username`)_
 * `ssh_network_id` - The network_id to be used when loging in to the vm via ssh _(defaults to first nic)_
 * `ssh_network_name` - The network_name to be used when loging in to the vm via ssh _(defaults to first nic)_
-  - Use either `ssh_network_id` or `ssh_network_name`. If specified both , use `ssh_network_id`
+  * Use either `ssh_network_id` or `ssh_network_name`. If specified both , use `ssh_network_id`
 * `vm_user` - User name to be used with winrm _(defaults to Vagrant's `config.winrm.username`)_
 * `vm_password` - Password to be used with winrm. _(If the Cosmic template is "Password Enabled", leaving this unset will trigger the plugin to retrieve and use it.)_
 * `private_ip_address` - private (static)ip address to be used by the virtual machine
@@ -157,10 +154,7 @@ Vagrant.configure("2") do |config|
 end
 ```
 
-In addition to the above top-level configs, you can use the `region_config`
-method to specify region-specific overrides within your Vagrantfile. Note
-that the top-level `region` config must always be specified to choose which
-region you want to actually use, however. This looks like this:
+In addition to the above top-level configs, you can use the `region_config` method to specify region-specific overrides within your Vagrantfile. Note that the top-level `region` config must always be specified to choose which region you want to actually use, however. This looks like this:
 
 ```ruby
 Vagrant.configure("2") do |config|
@@ -183,30 +177,21 @@ Vagrant.configure("2") do |config|
 end
 ```
 
-The domain-specific configurations will override the top-level
-configurations when that domain is used. They otherwise inherit
-the top-level configurations, as you would probably expect.
+The domain-specific configurations will override the top-level configurations when that domain is used. They otherwise inherit the top-level configurations, as you would probably expect.
 
 ## Networks
 
-Networking features in the form of `config.vm.network` are not
-supported with `vagrant-cosmic`, currently. If any of these are
-specified, Vagrant will emit a warning, but will otherwise boot
-the Cosmic machine.
+Networking features in the form of `config.vm.network` are not supported with `vagrant-cosmic`, currently. If any of these are specified, Vagrant will emit a warning, but will otherwise boot the Cosmic machine.
 
 ### Basic networking versus Advanced networking
 
-The plugin will determine this network type dynamically from the zone.
-The setting `network_type` in the Vagrant file has been deprecated,
-and is silently ignored.
+The plugin will determine this network type dynamically from the zone. The setting `network_type` in the Vagrant file has been deprecated, and is silently ignored.
 
 ### Basic Networking
 
-If the network type of your zone is `basic`, you can use Security
-Groups and associate rules in your Vagrantfile.
+If the network type of your zone is `basic`, you can use Security Groups and associate rules in your Vagrantfile.
 
-If you already have Security Groups, you can associate them to your
-instance, with their IDs:
+If you already have Security Groups, you can associate them to your instance, with their IDs:
 
 ```ruby
 Vagrant.configure("2") do |config|
@@ -261,8 +246,7 @@ end
 
 ### Static NAT, Firewall, Port forwarding
 
-You can create your static nat, firewall and port forwarding rules in the Vagrantfile.
-You can use this rule to access virtual machine from an external machine.
+You can create your static nat, firewall and port forwarding rules in the Vagrantfile. You can use this rule to access virtual machine from an external machine.
 
 The rules created in Vagrantfile are removed when the virtual machine is destroyed.
 
@@ -292,7 +276,9 @@ Vagrant.configure("2") do |config|
   end
 end
 ```
+
 Most values in the firewall and portforwarding rules are not mandatory, except either startport/endport or privateport/publicport
+
 * `:ipaddress` - defaults to `pf_ip_address`
 * `:protocol` - defaults to `'tcp'`
 * `:publicport` - defaults to `:privateport`
@@ -302,8 +288,8 @@ Most values in the firewall and portforwarding rules are not mandatory, except e
 * `:startport` - defaults to `:endport`
 * `:endport` - not required by Cosmic
 
-
 For only allowing Vagrant to access the box for further provisioning (SSH/WinRM), and opening the Firewall for some subnets, the following config is sufficient:
+
 ```ruby
 Vagrant.configure("2") do |config|
   # ... other stuff
@@ -315,9 +301,11 @@ Vagrant.configure("2") do |config|
   end
 end
 ```
+
 Where X.X.X.X is the ip of the respective Cosmic network, this will automatically map the port of the used Communicator (SSH/Winrm) via a random public port, open the Firewall and set Vagrant to use it.
 
 The plugin can also automatically generate firewall rules off of the portforwarding rules:
+
 ```ruby
 Vagrant.configure("2") do |config|
   # ... other stuff
@@ -335,15 +323,18 @@ end
 ```
 
 ### Virtual Router versus VPC
+
 Both Virtual Routers and VPCs are supported when using port-forwarding and firewall. This is automatically determined by the specific `pf_ip_address`.
 
 Note that there are architectural differences in Cosmic which the configuration must adhere to.
 
 For VPC:
+
 * `pf_open_firewall` will be ignored as global setting and (specifically) in `port_forwarding_rules`
 * for `firewall_rules` to open access for `port_forwarding_rules`, the firewall rule should allow traffic for the `:privateport` port.
 
 For Virtual Router:
+
 * for `firewall_rules` to open access for `port_forwarding_rules`, the firewall rule should allow traffic for the `:publicport` port.
 
 Usage of other attributes and features work with both network types. Such as `:generate_firewall` for portforwarding rules, or `pf_trusted_networks` to automatically generate rules for the Communicator.
@@ -380,37 +371,39 @@ The maximum length of user_data is around 1500 bytes with Cosmic API < 4.2 (base
 To work on the `vagrant-cosmic` plugin, clone this repository out, and use
 [Bundler](http://gembundler.com) to get the dependencies:
 
-```
-$ bundle
+```shell
+bundle install
 ```
 
 Once you have the dependencies, verify the unit tests pass with `rake`:
 
-```
-$ bundle exec rake
+```shell
+bundle exec rake
 ```
 
-If the unit-tests pass, verify the plugin is functionaly good by running the functional tests with bats.
-Before running the tests you need to export a set of variables that are used in the tests. Look at the
-Rake file for the required variables, or run the following Rake command to check:
-```
+If the unit-tests pass, verify the plugin is functionaly good by running the functional tests with bats. Before running the tests you need to export a set of variables that are used in the tests. Look at the Rake file for the required variables, or run the following Rake command to check:
+
+```shell
 bundle exec rake functional_tests:check_environment
 ```
 
 Run all functional tests by executing:
-```
+
+```shell
 bundle exec rake functional_tests:all
 ```
 
 If those pass, you're ready to start developing the plugin. You can test
 the plugin without installing it into your Vagrant environment by just
 creating a `Vagrantfile` in the top level of this directory (it is gitignored)
-and add the following line to your `Vagrantfile`
+and add the following line to your `Vagrantfile`:
+
 ```ruby
 Vagrant.require_plugin "vagrant-cosmic"
 ```
-Use bundler to execute Vagrant:
 
-```
-$ bundle exec vagrant up --provider=cosmic
+Use `bundler` to execute Vagrant:
+
+```shell
+bundle exec vagrant up --provider=cosmic
 ```
