@@ -9,16 +9,12 @@ module VagrantPlugins
            ssh_network_id ssh_network_name vm_user vm_password private_ip_address).freeze
       INSTANCE_VAR_DEFAULT_EMPTY_ARRAY = %w(static_nat port_forwarding_rules firewall_rules).freeze
 
+      ### API settings
+
       # Cosmic API host.
       #
       # @return [String]
       attr_accessor :host
-
-      # Hostname for the machine instance
-      # This will be passed through to the api.
-      #
-      # @return [String]
-      attr_accessor :name
 
       # Cosmic API path.
       #
@@ -45,15 +41,53 @@ module VagrantPlugins
       # @return [String]
       attr_accessor :secret_key
 
-      # The timeout to wait for an instance to become ready.
+      ### Instance settings
+
+      # Hostname for the machine instance
+      # This will be passed through to the api.
       #
-      # @return [Fixnum]
-      attr_accessor :instance_ready_timeout
+      # @return [String]
+      attr_accessor :name
+
+      # Disk offering uuid to use for the instance
+      #
+      # @return [String]
+      attr_accessor :disk_offering_id
+
+      # Disk offering name to use for the instance
+      #
+      # @return [String]
+      attr_accessor :disk_offering_name
+
+      # display name for the instance
+      #
+      # @return [String]
+      attr_accessor :display_name
 
       # Domain id to launch the instance into.
       #
       # @return [String]
       attr_accessor :domain_id
+
+      # flag to enable/disable expunge vm on destroy
+      #
+      # @return [Boolean]
+      attr_accessor :expunge_on_destroy
+
+      # group for the instance
+      #
+      # @return [String]
+      attr_accessor :group
+
+      # The timeout to wait for an instance to become ready.
+      #
+      # @return [Fixnum]
+      attr_accessor :instance_ready_timeout
+
+      # The name of the keypair to use.
+      #
+      # @return [String]
+      attr_accessor :keypair
 
       # Network uuid(s) that the instance should use
       #
@@ -70,6 +104,11 @@ module VagrantPlugins
       # @return [String]
       attr_accessor :network_type
 
+      # Private ip for the instance
+      #
+      # @return [String]
+      attr_accessor :private_ip_address
+
       # Project uuid that the instance should belong to
       #
       # @return [String]
@@ -85,15 +124,30 @@ module VagrantPlugins
       # @return [String]
       attr_accessor :service_offering_name
 
-      # Disk offering uuid to use for the instance
+      # The key to be used when loging in to the vm via ssh
       #
       # @return [String]
-      attr_accessor :disk_offering_id
+      attr_accessor :ssh_key
 
-      # Disk offering name to use for the instance
+      # The network_id to be used when loging in to the vm via ssh
       #
       # @return [String]
-      attr_accessor :disk_offering_name
+      attr_accessor :ssh_network_id
+
+      # The network_name to be used when loging in to the vm via ssh
+      #
+      # @return [String]
+      attr_accessor :ssh_network_name
+
+      # The username to be used when loging in to the vm via ssh
+      #
+      # @return [String]
+      attr_accessor :ssh_user
+
+      # Paramters for Static NAT
+      #
+      # @return [String]
+      attr_accessor :static_nat
 
       # Template uuid to use for the instance
       #
@@ -104,6 +158,21 @@ module VagrantPlugins
       #
       # @return [String]
       attr_accessor :template_name
+
+      # The user data string
+      #
+      # @return [String]
+      attr_accessor :user_data
+
+      # The username to be used when loging in to the vm
+      #
+      # @return [String]
+      attr_accessor :vm_password
+
+      # The username to be used when loging in to the vm
+      #
+      # @return [String]
+      attr_accessor :vm_user
 
       # Zone uuid to launch the instance into. If nil, it will
       # launch in default project.
@@ -117,15 +186,20 @@ module VagrantPlugins
       # @return [String]
       attr_accessor :zone_name
 
-      # The name of the keypair to use.
-      #
-      # @return [String]
-      attr_accessor :keypair
+      ### Firewall settings
 
-      # Paramters for Static NAT
+      # comma separated list of firewall rules
+      # (hash with rule parameters)
       #
-      # @return [String]
-      attr_accessor :static_nat
+      # @return [Array]
+      attr_accessor :firewall_rules
+
+      # flag to enable/disable automatic open firewall rule
+      #
+      # @return [Boolean]
+      attr_accessor :pf_open_firewall
+
+      ### Port forward settings
 
       # IP address id to use for port forwarding rule
       #
@@ -162,11 +236,6 @@ module VagrantPlugins
       # @return [String]
       attr_accessor :pf_private_port
 
-      # flag to enable/disable automatic open firewall rule
-      #
-      # @return [Boolean]
-      attr_accessor :pf_open_firewall
-
       # CIDR List string of trusted networks
       #
       # @return [String]
@@ -177,67 +246,6 @@ module VagrantPlugins
       #
       # @return [Array]
       attr_accessor :port_forwarding_rules
-
-      # comma separated list of firewall rules
-      # (hash with rule parameters)
-      #
-      # @return [Array]
-      attr_accessor :firewall_rules
-
-      # display name for the instance
-      #
-      # @return [String]
-      attr_accessor :display_name
-
-      # group for the instance
-      #
-      # @return [String]
-      attr_accessor :group
-
-      # The user data string
-      #
-      # @return [String]
-      attr_accessor :user_data
-
-      # The key to be used when loging in to the vm via ssh
-      #
-      # @return [String]
-      attr_accessor :ssh_key
-
-      # The username to be used when loging in to the vm via ssh
-      #
-      # @return [String]
-      attr_accessor :ssh_user
-
-      # The network_id to be used when loging in to the vm via ssh
-      #
-      # @return [String]
-      attr_accessor :ssh_network_id
-
-      # The network_name to be used when loging in to the vm via ssh
-      #
-      # @return [String]
-      attr_accessor :ssh_network_name
-
-      # The username to be used when loging in to the vm
-      #
-      # @return [String]
-      attr_accessor :vm_user
-
-      # The username to be used when loging in to the vm
-      #
-      # @return [String]
-      attr_accessor :vm_password
-
-      # Private ip for the instance
-      #
-      # @return [String]
-      attr_accessor :private_ip_address
-
-      # flag to enable/disable expunge vm on destroy
-      #
-      # @return [Boolean]
-      attr_accessor :expunge_on_destroy
 
       def initialize(domain_specific = false)
         # Initialize groups in bulk, re-use these groups to set defaults in bulk
