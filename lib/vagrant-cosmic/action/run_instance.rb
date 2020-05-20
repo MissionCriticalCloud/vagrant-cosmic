@@ -82,7 +82,7 @@ module VagrantPlugins
 
         def sanitize_domain_config
           # Accept a single entry as input, convert it to array
-          @domain_config.pf_trusted_networks = [@domain_config.pf_trusted_networks] if @domain_config.pf_trusted_networks
+          @domain_config.pf_trusted_networks = Array(@domain_config.pf_trusted_networks) if @domain_config.pf_trusted_networks
 
           if @domain_config.network_id.nil?
             # Use names if ids are not present
