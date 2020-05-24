@@ -8,6 +8,8 @@ Dir["#{__dir__}/vagrant-cosmic/support/**/*.rb"].each { |f| require f }
 SimpleCov.start
 Coveralls.wear!
 
+AFFINITY_GROUP_NAME = 'Affinity Group Name'.freeze
+AFFINITY_GROUP_ID = 'Affinity Group UUID'.freeze
 ZONE_NAME = 'Zone Name'.freeze
 ZONE_ID = 'Zone UUID'.freeze
 SERVICE_OFFERING_NAME = 'Service Offering Name'.freeze
