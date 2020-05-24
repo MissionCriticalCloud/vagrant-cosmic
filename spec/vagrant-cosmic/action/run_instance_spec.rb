@@ -38,6 +38,20 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
     }
   end
 
+  let(:list_affinitygroups_response) do
+    {
+      'listaffinitygroupsresponse' => {
+        'count' => 1,
+        'affinitygroup' => [
+          {
+            'id' => AFFINITY_GROUP_ID,
+            'name' => AFFINITY_GROUP_NAME,
+          }
+        ]
+      }
+    }
+  end
+
   let(:list_public_ip_addresses_response) do
     {
       'listpublicipaddressesresponse' => {
@@ -325,6 +339,8 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
       let(:pf_trusted_networks) { nil }
       let(:pf_public_port_randomrange) { { start: 49_152, end: 65_535 } }
       let(:pf_open_firewall) { true }
+      let(:affinity_group_id) { nil }
+      let(:affinity_group_name) { nil }
       let(:disk_offering_name) { nil }
 
       let(:provider_config) do
@@ -341,6 +357,8 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
           cfg.pf_open_firewall = pf_open_firewall
           cfg.ssh_key = ssh_key
           cfg.disk_offering_name = disk_offering_name
+          cfg.affinity_group_id = affinity_group_id
+          cfg.affinity_group_name = affinity_group_name
         end
         config.finalize!
         config.get_domain_config(:cosmic)
@@ -386,6 +404,36 @@ describe VagrantPlugins::Cosmic::Action::RunInstance do
           expect(file).to receive(:write).with("#{VOLUME_ID}\n")
           allow(server).to receive(:id).and_return(SERVER_ID)
         end
+        it 'starts a vm' do
+          should eq true
+        end
+      end
+
+      context 'with affinity group id' do
+        let(:affinity_group_id) { AFFINITY_GROUP_ID }
+        let(:create_servers_parameters) { super().merge('affinity_group_ids' => AFFINITY_GROUP_ID) }
+
+        before(:each) do
+          expect(cosmic_compute).to receive(:send)
+            .with(:list_affinity_groups, {"id"=>"Affinity Group UUID"})
+            .and_return(list_affinitygroups_response)
+        end
+
+        it 'starts a vm' do
+          should eq true
+        end
+      end
+
+      context 'with affinity group name' do
+        let(:affinity_group_name) { AFFINITY_GROUP_NAME }
+        let(:create_servers_parameters) { super().merge('affinity_group_ids' => AFFINITY_GROUP_ID) }
+
+        before(:each) do
+          expect(cosmic_compute).to receive(:send)
+            .with(:list_affinity_groups, {})
+            .and_return(list_affinitygroups_response)
+        end
+
         it 'starts a vm' do
           should eq true
         end

@@ -101,9 +101,10 @@ to update UUIDs in your Vagrantfile. If both are specified, the id parameter tak
 * `scheme` - Cosmic API scheme _(defaults: https (thanks to the resolution order in fog))_
 * `api_key` - The API key for accessing Cosmic
 * `secret_key` - The secret key for accessing Cosmic
-* `instance_ready_timeout` - The number of seconds to wait for the instance
-  to become "ready" in Cosmic. Defaults to 120 seconds.
+* `affinity_group_id` - An affinity group uuid or array of uuid(s) to add the instance to
+* `affinity_group_name` - An affinity group name or array of name(s) to add the instance to
 * `domain_id` - Domain id to launch the instance into
+* `instance_ready_timeout` - The number of seconds to wait for the instance to become "ready" in Cosmic. Defaults to 120 seconds.
 * `network_id` - Network uuid(s) that the instance should use
   * `network_id` is single value (e.g. `"AAAA"`) or multiple values (e.g. `["AAAA", "BBBB"]`)
 * `network_name` - Network name(s) that the instance should use
