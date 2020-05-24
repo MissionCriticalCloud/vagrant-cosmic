@@ -84,6 +84,21 @@ module VagrantPlugins
           # Accept a single entry as input, convert it to array
           @domain_config.pf_trusted_networks = Array(@domain_config.pf_trusted_networks) if @domain_config.pf_trusted_networks
 
+          if @domain_config.affinity_group_id.nil?
+            # Use names if ids are not present
+            @domain_config.affinity_group_id = []
+
+            if @domain_config.affinity_group_name.nil?
+              @domain_config.affinity_group_name = []
+            else
+              @domain_config.affinity_group_name = Array(@domain_config.affinity_group_name)
+            end
+          else
+            # Use ids if present
+            @domain_config.affinity_group_id = Array(@domain_config.affinity_group_id)
+            @domain_config.affinity_group_name = []
+          end
+
           if @domain_config.network_id.nil?
             # Use names if ids are not present
             @domain_config.network_id = []
@@ -101,6 +116,7 @@ module VagrantPlugins
         end
 
         def initialize_parameters
+          @affinity_groups = CosmicResource.create_list(@domain_config.affinity_group_id, @domain_config.affinity_group_name, 'affinity_group')
           @zone = CosmicResource.new(@domain_config.zone_id, @domain_config.zone_name, 'zone')
           @networks = CosmicResource.create_list(@domain_config.network_id, @domain_config.network_name, 'network')
           @service_offering = CosmicResource.new(@domain_config.service_offering_id, @domain_config.service_offering_name, 'service_offering')
@@ -116,6 +132,9 @@ module VagrantPlugins
             @resource_service.sync_resource(@disk_offering, {listall: true, name: @disk_offering.name})
             @resource_service.sync_resource(@template, {zoneid: @zone.id, templatefilter: 'executable', listall: true, name: @template.name})
             @resource_service.sync_resource(@pf_ip_address)
+            @affinity_groups.each do |affinity_group|
+              @resource_service.sync_resource(affinity_group)
+            end
           rescue CosmicResourceNotFound => e
             @env[:ui].error(e.message)
             exit(false)
@@ -154,6 +173,9 @@ module VagrantPlugins
           # Launch!
           @env[:ui].info(I18n.t('vagrant_cosmic.launching_instance'))
           @env[:ui].info(" -- Display Name: #{@domain_config.display_name}")
+          @affinity_groups.each do |affinity_group|
+            @env[:ui].info(" -- Affinity group: #{affinity_group.name} (#{affinity_group.id})")
+          end
           @env[:ui].info(" -- Group: #{@domain_config.group}") if @domain_config.group
           @env[:ui].info(" -- Service offering: #{@service_offering.name} (#{@service_offering.id})")
           @env[:ui].info(" -- Disk offering: #{@disk_offering.name} (#{@disk_offering.id})") unless @disk_offering.id.nil?
@@ -200,6 +222,10 @@ module VagrantPlugins
               :image_id => @template.id
           }
 
+          unless @affinity_groups.empty?
+            ags = @affinity_groups.map(&:id).compact.join(",")
+            options['affinity_group_ids'] = ags unless ags.empty?
+          end
           unless @networks.empty?
             nets = @networks.map(&:id).compact.join(",")
             options['network_ids'] = nets unless nets.empty?
