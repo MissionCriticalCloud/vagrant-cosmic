@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the `vagrant-cosmic` plugin.
 
-## Unreleased
+## 0.2.0 (2020-06-11)
 
 - Added support to provision instances in an already existing Affinity Group(s).
 
